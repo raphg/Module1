@@ -14,28 +14,17 @@ output:
 
 * M/T: 8am-2:30pm PST, W: 8am-11am PST
 
-* Location: Zoom (see class email for link)
+* Location: Zoom (see class email or Slack for link)
 
 **Software:**
 
-* [R project](http://www.r-project.org/)
-* [RStudio](http://www.rstudio.com/)
-* [Bioconductor](http://bioconductor.org/)
-* [Tidyverse](https://www.tidyverse.org/)
-* [Git](https://git-scm.com/)
-* [GitHub](https://github.com/)
-
 Please install the latest versions of R and RStudio:
-https://jhudatascience.org/intro_to_r/modules/Setup/R_and_RStudio_installation.html
+https://sisbid.github.io/Data-Wrangling/lecture_notes/Setup.html
 
 Make sure you have git installed: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
 Make sure you have a GitHub profile: https://github.com/
 
-**Optional Software:**
-
-* [AnVIL (cloud)](https://anvil.terra.bio/)
-* [AnVIL (site)](https://anvilproject.org/)
 
 <!--
 **Resources:**
