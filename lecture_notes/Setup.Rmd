@@ -6,6 +6,12 @@ output:
     df_print: paged
 ---
 
+```{r, include=FALSE}
+library(config)
+```
+
+
+
 -   [Installing `R`](#installing-r)
 -   [Installing `RStudio`](#installing-rstudio)
 -   [`R` packages](#r-packages)
