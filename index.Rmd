@@ -14,7 +14,7 @@ output:
 
 * M/T: 8am-2:30pm PST, W: 8am-11am PST
 
-* Location: Zoom (see class email or slack for link)
+* Location: Zoom (see class email or Slack for link)
 
 **Software:**
 
