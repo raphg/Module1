@@ -81,7 +81,7 @@ Make sure you have a GitHub profile: https://github.com/
 
 [x1]: lecture_notes/Setup.html
 [x2]: lecture_notes/Setup.pdf
-[01]: https://docs.google.com/presentation/d/1IpQGkwgbdisTnQ2zeBeKKf6ikl20GVsu49cKu4wN-5I/edit?usp=sharing
+[01]: https://docs.google.com/presentation/d/1gy9KJt2FZv8p85rhFKFOlFXRr9v7rz0nMnrws8g5mdc/edit?usp=sharing
 [02]: lecture_notes/sisbid_intro_2024.pdf
 [03]: lecture_notes/Data_IO_Part1.html
 [04]: lecture_notes/Data_IO_Part1.pdf
