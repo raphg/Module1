@@ -2,10 +2,10 @@
 title: "Subsetting Data in R"
 author: "Data Wrangling in R"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     css: styles.css
     widescreen: yes
+  beamer_presentation: default
 ---
 
 ```{r, include = FALSE}
@@ -325,9 +325,23 @@ If you try to filter or select for a column that does not exist it will not work
 Did the filter work the way you expected? Did the dimensions change?
 
 ```{r, echo = FALSE, fig.align='center'}
-knitr::include_graphics("https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif")
+url = "https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif"
+knitr::include_graphics(url)
 ```
-https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif
+Source: https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif
+
+## Summary
+
+- `pull()` can help us see a vector version of our variables - we can "pull" out the data from a dataframe
+- The pipe (`%>%`) can help us to do sequential steps
+- `select()` makes a smaller table of just selected variables
+- tidyselect functions can help us select specific columns: `contains()`, `ends_with()`, `starts_with()`
+- `filter` can remove rows based on conditions
+- `==` is needed to filter for rows that are "exactly equal" to a value
+- `!=` does the opposite
+- `%in%` enables us to do multiple `==` conditions such as `%in% c(1,2,3)`
+- `|` is for or logic and `&` is for and logic when combining filter conditions together
+- Always check that you filtered for what you think you did!
 
 ## Lab
 

@@ -3068,18 +3068,21 @@ var loadDeck = function(event) {
   });
 };
 
-if (document.readyState !== "loading" &&
-    document.querySelector('slides') === null) { 
-  // if the document is done loading but our element hasn't yet appeared, defer
-  // loading of the deck
-  window.setTimeout(function() {
-    loadDeck(null);
-  }, 0);
-} else {
-  // still loading the DOM, so wait until it's finished
-  document.addEventListener("DOMContentLoaded", loadDeck);
-}
+if (!window.Shiny) {
+  // If Shiny is loaded, the slide deck is initialized in ioslides template
 
+  if (document.readyState !== "loading" &&
+      document.querySelector('slides') === null) {
+    // if the document is done loading but our element hasn't yet appeared, defer
+    // loading of the deck
+    window.setTimeout(function() {
+      loadDeck(null);
+    }, 0);
+  } else {
+    // still loading the DOM, so wait until it's finished
+    document.addEventListener("DOMContentLoaded", loadDeck);
+  }
+}
 
 
 </script>
@@ -3122,7 +3125,7 @@ div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -3355,7 +3358,7 @@ readxl::read_excel()</pre>
  8  0.26
  9  0.22
 10  0.23
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Selecting multiple columns of a <code>data.frame</code>:</h2></hgroup><article  id="selecting-multiple-columns-of-a-data.frame">
 
@@ -3376,7 +3379,7 @@ readxl::read_excel()</pre>
  8  0.26  61.9
  9  0.22  65.1
 10  0.23  59.4
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>See the Select &ldquo;helpers&rdquo;</h2></hgroup><article  id="see-the-select-helpers">
 
@@ -3411,7 +3414,7 @@ everything()</pre>
  8  0.26 Very Good H     SI1    
  9  0.22 Fair      E     VS2    
 10  0.23 Very Good H     VS1    
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Tidyselect helpers</h2></hgroup><article  id="tidyselect-helpers-1">
 
@@ -3432,7 +3435,7 @@ everything()</pre>
  8    55   337
  9    61   337
 10    61   338
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Tidyselect helpers</h2></hgroup><article  id="tidyselect-helpers-2">
 
@@ -3459,7 +3462,7 @@ everything()</pre>
  8  0.3  Good      J     SI1      64      55   339  4.25  4.28  2.73
  9  0.23 Ideal     J     VS1      62.8    56   340  3.93  3.9   2.46
 10  0.22 Premium   F     SI1      60.4    61   342  3.88  3.84  2.33
-# … with 48,305 more rows</pre>
+# ℹ 48,305 more rows</pre>
 
 <p>Note, no subsetting is necessary. R &ldquo;knows&rdquo; <code>depth</code> refers to a column of <code>diamonds</code>.</p>
 
@@ -3482,7 +3485,7 @@ everything()</pre>
  8  0.3  Good      J     SI1      64      55   339  4.25  4.28  2.73
  9  0.23 Ideal     J     VS1      62.8    56   340  3.93  3.9   2.46
 10  0.22 Premium   F     SI1      60.4    61   342  3.88  3.84  2.33
-# … with 48,305 more rows</pre>
+# ℹ 48,305 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Subset rows of a <code>data.frame</code>:</h2></hgroup><article  id="subset-rows-of-a-data.frame-2">
 
@@ -3503,7 +3506,7 @@ everything()</pre>
  8  0.7  Very Good F     VS2      60.9    61  2812  5.66  5.71  3.46
  9  0.71 Good      E     SI1      62.8    64  2817  5.6   5.54  3.5 
 10  0.7  Premium   E     VS2      62.4    61  2818  5.66  5.63  3.52
-# … with 1,694 more rows</pre>
+# ℹ 1,694 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Subset rows of a <code>data.frame</code>:</h2></hgroup><article  id="subset-rows-of-a-data.frame-3">
 
@@ -3525,7 +3528,7 @@ everything()</pre>
  8  1.06 Premium I     SI2      61.5    57  2968  6.57  6.49  4.02
  9  0.91 Premium I     SI2      60.2    59  2981  6.29  6.24  3.77
 10  0.9  Premium I     SI2      60.6    60  3001  6.23  6.28  3.79
-# … with 302 more rows</pre>
+# ℹ 302 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Subset rows of a <code>data.frame</code>:</h2></hgroup><article  id="subset-rows-of-a-data.frame-4">
 
@@ -3546,7 +3549,7 @@ everything()</pre>
  8  0.2  Premium   E     SI2      60.2    62   345  3.79  3.75  2.27
  9  0.3  Ideal     I     SI2      62      54   348  4.31  4.34  2.68
 10  0.3  Good      J     SI1      63.4    54   351  4.23  4.29  2.7 
-# … with 22,249 more rows</pre>
+# ℹ 22,249 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Subset rows of a <code>data.frame</code>:</h2></hgroup><article  id="subset-rows-of-a-data.frame-5">
 
@@ -3568,7 +3571,7 @@ everything()</pre>
  8  0.75 Premium E     SI1      61.7    60  3024  5.84  5.8   3.59
  9  0.75 Premium D     SI1      59.2    58  3024  5.96  5.93  3.52
 10  1.02 Premium G     SI2      61.7    58  3027  6.46  6.41  3.97
-# … with 3,966 more rows</pre>
+# ℹ 3,966 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Note about quotes and numbers</h2></hgroup><article  id="note-about-quotes-and-numbers">
 
@@ -3613,7 +3616,7 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
  8  0.7  Very Good F     VS2      60.9    61  2812  5.66  5.71  3.46
  9  0.71 Good      E     SI1      62.8    64  2817  5.6   5.54  3.5 
 10  0.7  Premium   E     VS2      62.4    61  2818  5.66  5.63  3.52
-# … with 1,694 more rows</pre>
+# ℹ 1,694 more rows</pre>
 
 <p>You can use either syntax.</p>
 
@@ -3636,7 +3639,7 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
  8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
  9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
 10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
-# … with 52,188 more rows</pre>
+# ℹ 52,188 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Subset rows of a <code>data.frame</code>:</h2></hgroup><article  id="subset-rows-of-a-data.frame-9">
 
@@ -3679,7 +3682,7 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
  8  0.33 Ideal     I     SI2    
  9  0.32 Good      H     SI2    
 10  0.32 Very Good H     SI2    
-# … with 9,184 more rows</pre>
+# ℹ 9,184 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Combining <code>filter</code> and <code>select</code>:</h2></hgroup><article  id="combining-filter-and-select-1">
 
@@ -3718,7 +3721,7 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
  8   337  0.26 Very Good H     SI1    
  9   337  0.22 Fair      E     VS2    
 10   338  0.23 Very Good H     VS1    
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Multiple tidyselect functions</h2></hgroup><article  id="multiple-tidyselect-functions">
 
@@ -3739,7 +3742,7 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
  8  0.26 Very Good H     SI1        55   337
  9  0.22 Fair      E     VS2        61   337
 10  0.23 Very Good H     VS1        61   338
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Multiple patterns with tidyselect</h2></hgroup><article  id="multiple-patterns-with-tidyselect">
 
@@ -3760,7 +3763,7 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
  8  0.26 Very Good H     SI1       337
  9  0.22 Fair      E     VS2       337
 10  0.23 Very Good H     VS1       338
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Common error for filter or select</h2></hgroup><article  id="common-error-for-filter-or-select">
 
@@ -3775,7 +3778,22 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
 
 <p>Did the filter work the way you expected? Did the dimensions change?</p>
 
-<p><img src="https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif" style="display: block; margin: auto;" /> <a href='https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif' title=''>https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif</a></p>
+<p><img src="https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif" style="display: block; margin: auto;" /> Source: <a href='https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif' title=''>https://media.giphy.com/media/5b5OU7aUekfdSAER5I/giphy.gif</a></p>
+
+</article></slide><slide class=""><hgroup><h2>Summary</h2></hgroup><article  id="summary">
+
+<ul>
+<li><code>pull()</code> can help us see a vector version of our variables - we can &ldquo;pull&rdquo; out the data from a dataframe</li>
+<li>The pipe (<code>%&gt;%</code>) can help us to do sequential steps</li>
+<li><code>select()</code> makes a smaller table of just selected variables</li>
+<li>tidyselect functions can help us select specific columns: <code>contains()</code>, <code>ends_with()</code>, <code>starts_with()</code></li>
+<li><code>filter</code> can remove rows based on conditions</li>
+<li><code>==</code> is needed to filter for rows that are &ldquo;exactly equal&rdquo; to a value</li>
+<li><code>!=</code> does the opposite</li>
+<li><code>%in%</code> enables us to do multiple <code>==</code> conditions such as <code>%in% c(1,2,3)</code></li>
+<li><code>|</code> is for or logic and <code>&amp;</code> is for and logic when combining filter conditions together</li>
+<li>Always check that you filtered for what you think you did!</li>
+</ul>
 
 </article></slide><slide class=""><hgroup><h2>Lab</h2></hgroup><article  id="lab">
 
@@ -3806,6 +3824,11 @@ diamonds %&gt;% filter(price == &quot;3001&quot;) # this works </pre>
        window.jQuery(document).on('slideenter', function(e) {
          window.jQuery(e.target).trigger('shown');
       });
+    }
+    if (window.Shiny) {
+      // Initialize slides when this script appears on the page, since it
+      // indicates that the <slides> markup has been fully loaded.
+      window.loadDeck();
     }
   })();
 </script>
