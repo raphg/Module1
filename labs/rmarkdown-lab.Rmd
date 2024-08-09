@@ -18,30 +18,30 @@ plot(x)
 ### This is a primary header. Add a secondary header with ## on the line below and recompile.
 
 
-5. Change figure height to something larger/smaller and see what happens
+4. Change figure height to something larger/smaller and see what happens
 
 ```{r chunk25, fig.height=5}
 x = rnorm(100)
 plot(x)
 ```
 
-6. Add a chunk option of fig.align="center" to center this plot
+5. Add a chunk option of fig.align="center" to center this plot
 
 ```{r chunk3}
 x = rnorm(100)
 plot(x)
 ```
 
-7. Add a chunk option of echo=FALSE and see what happens
+6. Add a chunk option of echo=FALSE and see what happens
 
 ```{r chunk4}
 x = rnorm(100)
 plot(x)
 ```
 
-8. Check out the docs at: http://rmarkdown.rstudio.com/ and look under formats. See if you can create and compile an R markdown presentation.
+7. Check out the docs at: http://rmarkdown.rstudio.com/ and look under formats. See if you can create and compile an R markdown presentation.
 
-9. Add the command devtools::session_info() to this chunk and look at the output
+8. Add the command devtools::session_info() to this chunk and look at the output
 
 ```{r session_info}
 
