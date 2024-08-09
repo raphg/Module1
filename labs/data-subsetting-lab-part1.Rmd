@@ -15,7 +15,6 @@ In this lab you can use the interactive console to explore but please record you
 library(tidyverse)
 ```
 
-# Part 1
 
 1. Check to see if you have the `mpg` dataset [hint: it's in the `ggplot2` package].
 
