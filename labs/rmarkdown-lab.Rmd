@@ -6,9 +6,8 @@ editor_options:
 ---
 
 1. Try compiling this document using the "Knit HTML" button. What files are produced?
-2. Edit the output to be "pdf_document" and recompile. What files are produced?
-3. Edit the output to be "word_document" and recompile. What files are produced?
-4. What does the label "chunk1" do in the following code chunk?
+2. Edit the output to be "word_document" and recompile. What files are produced?
+3. What does the label "chunk1" do in the following code chunk?
 
 
 ```{r chunk1}
@@ -40,15 +39,9 @@ x = rnorm(100)
 plot(x)
 ```
 
-8. Uncomment this code and recompile the document. Then add a chunk command cache=TRUE and recompile. What files are created? Try compiling one more time. 
+8. Check out the docs at: http://rmarkdown.rstudio.com/ and look under formats. See if you can create and compile an R markdown presentation.
 
-```{r longtime}
-#Sys.sleep(10)
-```
-
-9. Check out the docs at: http://rmarkdown.rstudio.com/ and look under formats. See if you can create and compile an R markdown presentation. How about a parameterized report?
-
-10. Add the command devtools::session_info() to this chunk and look at the output
+9. Add the command devtools::session_info() to this chunk and look at the output
 
 ```{r session_info}
 

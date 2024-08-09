@@ -93,8 +93,8 @@ Make sure you have a GitHub profile: https://github.com/
 [10]: labs/data-io-lab-part2.Rmd
 [11]: labs/data-io-lab-part2-key.Rmd
 [12]: labs/data-io-lab-part2-key.html
-[13]: https://docs.google.com/presentation/d/1SqI4Pqg_-fmjA_Ecr6OoCmhw4bfDfTXF5DFnRLwbjvI/edit?usp=sharing
-[14]: lecture_notes/sisbid_rep_research_2023.pdf
+[13]: https://docs.google.com/presentation/d/19HPlH3jLCzdjZYWS1jpYB7IIlj-YCSGCq1E-FpGJzAw/edit?usp=sharing
+[14]: lecture_notes/sisbid_rep_research_2024.pdf
 [15]: labs/rmarkdown-lab.Rmd
 [16]: labs/rmarkdown-lab-key.Rmd
 [17]: labs/rmarkdown-lab-key.html
