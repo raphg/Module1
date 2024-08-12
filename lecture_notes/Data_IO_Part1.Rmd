@@ -19,6 +19,7 @@ knitr::opts_chunk$set(comment = "")
 ## Explaining output on slides
 
 In slides, a command (we'll also call them code or a code chunk) will look like this
+
 ```{r code}
 head(mtcars)
 ```
