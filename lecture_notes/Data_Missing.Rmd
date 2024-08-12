@@ -32,7 +32,7 @@ Types of "missing" data:
 Logical operations return `NA` for `NA` values.  Think about it, the data could be `> 2` or not we don't know, so `R` says there is no `TRUE` or `FALSE`, so that is missing:
 
 ```{r}
-x = c(0, NA, 2, 3, 4)
+x <- c(0, NA, 2, 3, 4)
 x > 2
 ```
 
