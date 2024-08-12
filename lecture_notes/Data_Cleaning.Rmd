@@ -2,10 +2,11 @@
 title: "Data Cleaning Part 1"
 author: "Data Wrangling in R"
 output:
+  beamer_presentation: default
+  slidy_presentation: default
   ioslides_presentation:
     css: styles.css
-    widescreen: yes
-  beamer_presentation: default
+    widescreen: true
 ---
 
 
