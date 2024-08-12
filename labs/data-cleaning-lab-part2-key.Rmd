@@ -38,12 +38,10 @@ sub <- ufo %>% filter(str_detect(duration_hours_min, "min"),
 nrow(sub)
 ```
 
-4. How many ufo sighting cities end in (a) "field", (b) "ton" and (c) "port"? (hint - remember `stringr` uses vectors or variables)
+4. How many ufo sighting cities end in "port"? (hint - remember `stringr` uses vectors or variables)
 
 
 ```{r}
-ufo %>% pull(city) %>% str_subset("field$") %>% length() # A
-ufo %>% pull(city) %>% str_subset("ton$") %>% length() # B
 ufo %>% pull(city) %>% str_subset("port$") %>% length() # C
 ```
 

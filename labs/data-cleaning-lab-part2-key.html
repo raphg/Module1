@@ -415,14 +415,9 @@ durations greater than 14400 seconds (or 4 hours)?</li>
 nrow(sub)</code></pre>
 <pre><code>## [1] 10</code></pre>
 <ol start="4" style="list-style-type: decimal">
-<li>How many ufo sighting cities end in (a) “field”, (b) “ton” and (c)
-“port”? (hint - remember <code>stringr</code> uses vectors or
-variables)</li>
+<li>How many ufo sighting cities end in “port”? (hint - remember
+<code>stringr</code> uses vectors or variables)</li>
 </ol>
-<pre class="r"><code>ufo %&gt;% pull(city) %&gt;% str_subset(&quot;field$&quot;) %&gt;% length() # A</code></pre>
-<pre><code>## [1] 979</code></pre>
-<pre class="r"><code>ufo %&gt;% pull(city) %&gt;% str_subset(&quot;ton$&quot;) %&gt;% length() # B</code></pre>
-<pre><code>## [1] 4245</code></pre>
 <pre class="r"><code>ufo %&gt;% pull(city) %&gt;% str_subset(&quot;port$&quot;) %&gt;% length() # C</code></pre>
 <pre><code>## [1] 497</code></pre>
 
