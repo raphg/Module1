@@ -3068,18 +3068,21 @@ var loadDeck = function(event) {
   });
 };
 
-if (document.readyState !== "loading" &&
-    document.querySelector('slides') === null) { 
-  // if the document is done loading but our element hasn't yet appeared, defer
-  // loading of the deck
-  window.setTimeout(function() {
-    loadDeck(null);
-  }, 0);
-} else {
-  // still loading the DOM, so wait until it's finished
-  document.addEventListener("DOMContentLoaded", loadDeck);
-}
+if (!window.Shiny) {
+  // If Shiny is loaded, the slide deck is initialized in ioslides template
 
+  if (document.readyState !== "loading" &&
+      document.querySelector('slides') === null) {
+    // if the document is done loading but our element hasn't yet appeared, defer
+    // loading of the deck
+    window.setTimeout(function() {
+      loadDeck(null);
+    }, 0);
+  } else {
+    // still loading the DOM, so wait until it's finished
+    document.addEventListener("DOMContentLoaded", loadDeck);
+  }
+}
 
 
 </script>
@@ -3122,7 +3125,7 @@ div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -3262,8 +3265,9 @@ font-size: 16px;
 <p><code>read_delim()</code> and <code>read_csv()</code> from the <code>readr</code> package</p>
 
 <pre class = 'prettyprint lang-r'># example for character delimited:
-read_delim(file = &quot;file.txt&quot;, delim = &quot;\t&quot;)
-# comma delimited:
+read_delim(file = &quot;file.txt&quot;, delim = &quot;\t&quot;)</pre>
+
+<pre class = 'prettyprint lang-r'># comma delimited:
 read_csv(&quot;file.csv&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-1">
@@ -3285,6 +3289,8 @@ ufo &lt;- read_csv(
 
 # From your &#39;data-wrangling&#39; directory
 ufo &lt;- read_csv(&quot;ufo_data_complete.csv&quot;)</pre>
+
+<p>(<code>Warning message: One or more parsing issues, call &#39;problems()&#39;</code> – more on this later)</p>
 
 </article></slide><slide class=""><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-2">
 
@@ -3313,38 +3319,6 @@ read_table(file = &quot;file.txt&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Clean the data while you read it in!</h2></hgroup><article  id="clean-the-data-while-you-read-it-in">
 
-<p>Some data have different values for <code>NA</code>. We can account for that from the start!</p>
-
-<pre class = 'prettyprint lang-r'>vacc &lt;- read_csv(
-  &quot;https://sisbid.github.io/Data-Wrangling/data/vaccinations_1.csv&quot;
-)
-vacc_na &lt;- read_csv(
-  &quot;https://sisbid.github.io/Data-Wrangling/data/vaccinations_1.csv&quot;,
-  na = &#39;&quot;NaN&quot;&#39;
-)</pre>
-
-</article></slide><slide class=""><hgroup><h2>Check out the difference</h2></hgroup><article  id="check-out-the-difference" class="codesmall">
-
-<pre class = 'prettyprint lang-r'>vacc[1:3,1:4]</pre>
-
-<pre ># A tibble: 3 × 4
-  `State/Territory/Federal Entity` `Total Doses Delivered` `People with at least One Dose by State of Residence` `Percent of Total Pop with at least One Dose by State of Residence`
-  &lt;chr&gt;                            &lt;chr&gt;                   &lt;chr&gt;                                                 &lt;chr&gt;                                                              
-1 United States                    &quot;644652095&quot;             &quot;247695845&quot;                                           &quot;\&quot;NaN\&quot;&quot;                                                          
-2 Alaska                           &quot;\&quot;NaN\&quot;&quot;               &quot;480353&quot;                                              &quot;65.7&quot;                                                             
-3 Alabama                          &quot;8622020&quot;               &quot;\&quot;NaN\&quot;&quot;                                             &quot;59.3&quot;                                                             </pre>
-
-<pre class = 'prettyprint lang-r'>vacc_na[1:3,1:4]</pre>
-
-<pre ># A tibble: 3 × 4
-  `State/Territory/Federal Entity` `Total Doses Delivered` `People with at least One Dose by State of Residence` `Percent of Total Pop with at least One Dose by State of Residence`
-  &lt;chr&gt;                                              &lt;dbl&gt;                                                 &lt;dbl&gt;                                                               &lt;dbl&gt;
-1 United States                                  644652095                                             247695845                                                                NA  
-2 Alaska                                                NA                                                480353                                                                65.7
-3 Alabama                                          8622020                                                    NA                                                                59.3</pre>
-
-</article></slide><slide class=""><hgroup><h2>Clean the data while you read it in!</h2></hgroup><article  id="clean-the-data-while-you-read-it-in-1">
-
 <p>The argument <code>trim_ws</code> removes trailing and leading spaces around your data.</p>
 
 <pre class = 'prettyprint lang-r'># example:
@@ -3368,14 +3342,15 @@ read_csv(file = &quot;file.txt&quot;, trim_ws = TRUE)</pre>
 
 <pre class = 'prettyprint lang-r'>ufo &lt;- read_csv(&quot;data/ufo/ufo_data_complete.csv&quot;)</pre>
 
-<pre >Warning: One or more parsing issues, call `problems()` on your data frame for details, e.g.:
+<pre >Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
   dat &lt;- vroom(...)
   problems(dat)</pre>
 
 <pre >Rows: 88875 Columns: 11
-── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ────────────────────────────────────────────────────────
 Delimiter: &quot;,&quot;
-chr (10): datetime, city, state, country, shape, duration (hours/min), comments, date posted, latitude, longitude
+chr (10): datetime, city, state, country, shape, duration (hours/min), comme...
 dbl  (1): duration (seconds)
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
@@ -3426,40 +3401,28 @@ dbl  (1): duration (seconds)
 
 <pre class = 'prettyprint lang-r'>colnames(ufo)</pre>
 
-<pre > [1] &quot;datetime&quot;             &quot;city&quot;                 &quot;state&quot;                &quot;country&quot;              &quot;shape&quot;                &quot;duration (seconds)&quot;   &quot;duration (hours/min)&quot;
- [8] &quot;comments&quot;             &quot;date posted&quot;          &quot;latitude&quot;             &quot;longitude&quot;           </pre>
+<pre > [1] &quot;datetime&quot;             &quot;city&quot;                 &quot;state&quot;               
+ [4] &quot;country&quot;              &quot;shape&quot;                &quot;duration (seconds)&quot;  
+ [7] &quot;duration (hours/min)&quot; &quot;comments&quot;             &quot;date posted&quot;         
+[10] &quot;latitude&quot;             &quot;longitude&quot;           </pre>
 
-</article></slide><slide class=""><hgroup><h2>Structure using <code>str()</code></h2></hgroup><article  id="structure-using-str">
+</article></slide><slide class=""><hgroup><h2>Column names and classes using <code>glimpse()</code></h2></hgroup><article  id="column-names-and-classes-using-glimpse">
 
-<pre class = 'prettyprint lang-r'>str(ufo)</pre>
+<pre class = 'prettyprint lang-r'>glimpse(ufo)</pre>
 
-<pre >spc_tbl_ [88,875 × 11] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
- $ datetime            : chr [1:88875] &quot;10/10/1949 20:30&quot; &quot;10/10/1949 21:00&quot; &quot;10/10/1955 17:00&quot; &quot;10/10/1956 21:00&quot; ...
- $ city                : chr [1:88875] &quot;san marcos&quot; &quot;lackland afb&quot; &quot;chester (uk/england)&quot; &quot;edna&quot; ...
- $ state               : chr [1:88875] &quot;tx&quot; &quot;tx&quot; NA &quot;tx&quot; ...
- $ country             : chr [1:88875] &quot;us&quot; NA &quot;gb&quot; &quot;us&quot; ...
- $ shape               : chr [1:88875] &quot;cylinder&quot; &quot;light&quot; &quot;circle&quot; &quot;circle&quot; ...
- $ duration (seconds)  : num [1:88875] 2700 7200 20 20 900 300 180 1200 180 120 ...
- $ duration (hours/min): chr [1:88875] &quot;45 minutes&quot; &quot;1-2 hrs&quot; &quot;20 seconds&quot; &quot;1/2 hour&quot; ...
- $ comments            : chr [1:88875] &quot;This event took place in early fall around 1949-50. It occurred after a Boy Scout meeting in the Baptist Church&quot;| __truncated__ &quot;1949 Lackland AFB&amp;#44 TX.  Lights racing across the sky &amp;amp; making 90 degree turns on a dime.&quot; &quot;Green/Orange circular disc over Chester&amp;#44 England&quot; &quot;My older brother and twin sister were leaving the only Edna theater at about 9 PM&amp;#44...we had our bikes and I &quot;| __truncated__ ...
- $ date posted         : chr [1:88875] &quot;4/27/2004&quot; &quot;12/16/2005&quot; &quot;1/21/2008&quot; &quot;1/17/2004&quot; ...
- $ latitude            : chr [1:88875] &quot;29.8830556&quot; &quot;29.38421&quot; &quot;53.2&quot; &quot;28.9783333&quot; ...
- $ longitude           : chr [1:88875] &quot;-97.9411111&quot; &quot;-98.581082&quot; &quot;-2.916667&quot; &quot;-96.6458333&quot; ...
- - attr(*, &quot;spec&quot;)=
-  .. cols(
-  ..   datetime = col_character(),
-  ..   city = col_character(),
-  ..   state = col_character(),
-  ..   country = col_character(),
-  ..   shape = col_character(),
-  ..   `duration (seconds)` = col_double(),
-  ..   `duration (hours/min)` = col_character(),
-  ..   comments = col_character(),
-  ..   `date posted` = col_character(),
-  ..   latitude = col_character(),
-  ..   longitude = col_character()
-  .. )
- - attr(*, &quot;problems&quot;)=&lt;externalptr&gt; </pre>
+<pre >Rows: 88,875
+Columns: 11
+$ datetime               &lt;chr&gt; &quot;10/10/1949 20:30&quot;, &quot;10/10/1949 21:00&quot;, &quot;10/10/…
+$ city                   &lt;chr&gt; &quot;san marcos&quot;, &quot;lackland afb&quot;, &quot;chester (uk/engl…
+$ state                  &lt;chr&gt; &quot;tx&quot;, &quot;tx&quot;, NA, &quot;tx&quot;, &quot;hi&quot;, &quot;tn&quot;, NA, &quot;ct&quot;, &quot;al…
+$ country                &lt;chr&gt; &quot;us&quot;, NA, &quot;gb&quot;, &quot;us&quot;, &quot;us&quot;, &quot;us&quot;, &quot;gb&quot;, &quot;us&quot;, &quot;…
+$ shape                  &lt;chr&gt; &quot;cylinder&quot;, &quot;light&quot;, &quot;circle&quot;, &quot;circle&quot;, &quot;light…
+$ `duration (seconds)`   &lt;dbl&gt; 2700, 7200, 20, 20, 900, 300, 180, 1200, 180, 1…
+$ `duration (hours/min)` &lt;chr&gt; &quot;45 minutes&quot;, &quot;1-2 hrs&quot;, &quot;20 seconds&quot;, &quot;1/2 hou…
+$ comments               &lt;chr&gt; &quot;This event took place in early fall around 194…
+$ `date posted`          &lt;chr&gt; &quot;4/27/2004&quot;, &quot;12/16/2005&quot;, &quot;1/21/2008&quot;, &quot;1/17/2…
+$ latitude               &lt;chr&gt; &quot;29.8830556&quot;, &quot;29.38421&quot;, &quot;53.2&quot;, &quot;28.9783333&quot;,…
+$ longitude              &lt;chr&gt; &quot;-97.9411111&quot;, &quot;-98.581082&quot;, &quot;-2.916667&quot;, &quot;-96.…</pre>
 
 </article></slide><slide class=""><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-6">
 
@@ -3471,14 +3434,14 @@ dbl  (1): duration (seconds)
 <pre class = 'prettyprint lang-r'>head(problems(ufo))</pre>
 
 <pre ># A tibble: 6 × 5
-    row   col expected   actual     file                                                                                
-  &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;                                                                               
-1   878    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangling_SISBID/data/ufo/ufo_data_complete.csv
-2  1713    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangling_SISBID/data/ufo/ufo_data_complete.csv
-3  1815    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangling_SISBID/data/ufo/ufo_data_complete.csv
-4  2858    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangling_SISBID/data/ufo/ufo_data_complete.csv
-5  3734    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangling_SISBID/data/ufo/ufo_data_complete.csv
-6  4756    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangling_SISBID/data/ufo/ufo_data_complete.csv</pre>
+    row   col expected   actual     file                                        
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;                                       
+1   878    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangl…
+2  1713    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangl…
+3  1815    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangl…
+4  2858    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangl…
+5  3734    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangl…
+6  4756    12 11 columns 12 columns /Users/avahoffman/Dropbox/JHSPH/Data-Wrangl…</pre>
 
 <pre class = 'prettyprint lang-r'>dim(problems(ufo))</pre>
 
@@ -3580,6 +3543,11 @@ save(ufo, x, file = &quot;ufo_data.rda&quot;)</pre>
        window.jQuery(document).on('slideenter', function(e) {
          window.jQuery(e.target).trigger('shown');
       });
+    }
+    if (window.Shiny) {
+      // Initialize slides when this script appears on the page, since it
+      // indicates that the <slides> markup has been fully loaded.
+      window.loadDeck();
     }
   })();
 </script>
