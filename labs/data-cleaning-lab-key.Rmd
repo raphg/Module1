@@ -1,6 +1,8 @@
 ---
 title: "Data Cleaning lab key"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 
@@ -29,9 +31,10 @@ ufo_clean <- clean_names(ufo)
 
 ```{r}
 South_West <- ufo_clean %>% filter(state %in% c("tx", "nm", "ut")) %>%
-  mutate(recode(state, "Texas" = "tx",
-                        "New_Mexico" = "nm",
-                        "Utah" = "ut"))
+  mutate(state = recode(state,  
+                        "tx" = "Texas",
+                        "nm" = "New_Mexico" ,
+                        "ut" = "Utah"))
 South_West
 
 ```
