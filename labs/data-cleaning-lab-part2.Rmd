@@ -30,13 +30,13 @@ ufo <- clean_names(ufo)
 
 ```
 
-3. How accurate is the (formerly-named) `duration (seconds)` column? I.e. how many of the above minutes-scale observations have durations less than 60 seconds or greater than 3600 seconds? 
+3. How accurate is the (formerly-named) `duration (seconds)` column? I.e. how many of the above minutes-scale observations have durations greater than 14400 seconds (or 4 hours)? 
 
 ```{r}
 
 ```
 
-4. How many ufo sighting cities end in (a) "field", (b) "ton" and (c) "port"?
+4. How many ufo sighting cities end in "port"?
 
 
 ```{r}

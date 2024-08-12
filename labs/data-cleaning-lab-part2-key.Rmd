@@ -30,20 +30,18 @@ ufo <- clean_names(ufo)
 ufo %>% filter(str_detect(duration_hours_min, "min"))%>% nrow()
 ```
 
-3. How accurate is the (formerly-named) `duration (seconds)` column? I.e. how many of the above minutes-scale observations have durations less than 60 seconds or greater than 3600 seconds? 
+3. How accurate is the (formerly-named) `duration (seconds)` column? I.e. how many of the above minutes-scale observations have durations greater than 14400 seconds (or 4 hours)? 
 
 ```{r}
 sub <- ufo %>% filter(str_detect(duration_hours_min, "min"),
-                      duration_seconds<60 | duration_seconds >3600)
+                      duration_seconds >14400)
 nrow(sub)
 ```
 
-4. How many ufo sighting cities end in (a) "field", (b) "ton" and (c) "port"? (hint - remember `stringr` uses vectors or variables)
+4. How many ufo sighting cities end in "port"? (hint - remember `stringr` uses vectors or variables)
 
 
 ```{r}
-ufo %>% pull(city) %>% str_subset("field$") %>% length() # A
-ufo %>% pull(city) %>% str_subset("ton$") %>% length() # B
 ufo %>% pull(city) %>% str_subset("port$") %>% length() # C
 ```
 

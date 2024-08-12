@@ -354,14 +354,16 @@ display: none;
 
 
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-## ✔ ggplot2 3.4.0      ✔ purrr   1.0.1 
-## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.3.0      ✔ stringr 1.5.0 
-## ✔ readr   2.1.3      ✔ forcats 0.5.2 
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <ol style="list-style-type: decimal">
 <li>Read in the UFO dataset (used in the Data IO lectures) as an R
 object called <code>ufo</code>. You can read directly from the web here:
@@ -406,21 +408,16 @@ similar ones that don’t contain some version of the word
 <ol start="3" style="list-style-type: decimal">
 <li>How accurate is the (formerly-named) <code>duration (seconds)</code>
 column? I.e. how many of the above minutes-scale observations have
-durations less than 60 seconds or greater than 3600 seconds?</li>
+durations greater than 14400 seconds (or 4 hours)?</li>
 </ol>
 <pre class="r"><code>sub &lt;- ufo %&gt;% filter(str_detect(duration_hours_min, &quot;min&quot;),
-                      duration_seconds&lt;60 | duration_seconds &gt;3600)
+                      duration_seconds &gt;14400)
 nrow(sub)</code></pre>
-<pre><code>## [1] 449</code></pre>
+<pre><code>## [1] 10</code></pre>
 <ol start="4" style="list-style-type: decimal">
-<li>How many ufo sighting cities end in (a) “field”, (b) “ton” and (c)
-“port”? (hint - remember <code>stringr</code> uses vectors or
-variables)</li>
+<li>How many ufo sighting cities end in “port”? (hint - remember
+<code>stringr</code> uses vectors or variables)</li>
 </ol>
-<pre class="r"><code>ufo %&gt;% pull(city) %&gt;% str_subset(&quot;field$&quot;) %&gt;% length() # A</code></pre>
-<pre><code>## [1] 979</code></pre>
-<pre class="r"><code>ufo %&gt;% pull(city) %&gt;% str_subset(&quot;ton$&quot;) %&gt;% length() # B</code></pre>
-<pre><code>## [1] 4245</code></pre>
 <pre class="r"><code>ufo %&gt;% pull(city) %&gt;% str_subset(&quot;port$&quot;) %&gt;% length() # C</code></pre>
 <pre><code>## [1] 497</code></pre>
 
