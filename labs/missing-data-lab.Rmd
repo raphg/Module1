@@ -1,5 +1,5 @@
 ---
-title: "Missing Data Lab"
+title: "Missing Data Lab Key"
 output: html_document
 ---
 
@@ -30,12 +30,12 @@ Hint: You first need to `pull` out the vector version of this variable to use th
 ```
 
 
-
 2.  Filter rows of bike, so that only rows remain that do NOT have missing values for the `route` variable,  using `drop_na`. Assign this to the object `have_route.`
 
 ```{r}
 
 ```
+
 
 3.  Use `naniar` to make a visual of the amount of data missing for each variable of `bike` (use `gg_miss_var()`). Check out more about this package here: https://www.njtierney.com/post/2018/06/12/naniar-on-cran/
 
