@@ -1,8 +1,6 @@
 ---
 title: "Missing Data Lab Key"
 output: html_document
-editor_options: 
-  chunk_output_type: console
 ---
 
 # Data used
