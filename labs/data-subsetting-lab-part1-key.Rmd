@@ -76,5 +76,5 @@ mpg %>% filter(class =="suv" | class == "minivan") %>% nrow()
 9. Filter cars with displacements (`displ`) greater than 4 and that are all 4 wheel drive (`drv`). How many cars/rows are there. 
 
 ```{r}
-mpg %>% filter(displ > 4, drv == "4") %>% nrow()
+mpg %>% filter(displ > 4 & drv == "4") %>% nrow()
 ```
