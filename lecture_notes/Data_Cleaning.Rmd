@@ -228,221 +228,6 @@ ufo_clean %>% mutate(country = case_when(
 
 
 
-
-<!-- ## Strange country values -->
-
-
-<!-- Sometimes `country` is `NA` even though `state` is known. -->
-<!-- A conditional more flexible recoding would be helpful... -->
-
-
-<!-- ```{r} -->
-<!-- head(ufo_clean) -->
-
-<!-- ``` -->
-
-<!-- ## Deeper look -->
-
-<!-- Looking at city... it seems like many of these are in fact in the US. -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(state == "tx") %>% count(country, state) -->
-<!-- ufo_clean %>% filter(state == "tx" & is.na(country)) %>% select(city) -->
-<!-- ``` -->
-
-
-<!-- ## Checkin Utah as well -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(state == "ut") %>% count(country, state) -->
-<!-- ufo_clean %>% filter(state == "ut" & is.na(country))  %>% select(city) -->
-<!-- ``` -->
-
-
-
-<!-- ## Get US States -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(country == "us") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-<!-- US_states <- ufo_clean %>%  -->
-<!--   filter(country == "us") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-
-<!-- ``` -->
-
-<!-- ## Get Canada States -->
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(country == "ca") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-<!-- CA_states <- ufo_clean %>%  -->
-<!--   filter(country == "ca") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-
-<!-- ``` -->
-
-<!-- ## Get Great Britan states -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(country == "gb") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-<!-- GB_states <- ufo_clean %>%  -->
-<!--   filter(country == "gb") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-
-<!-- ``` -->
-
-<!-- A small overlap with US states. -->
-
-
-
-<!-- ## Get DE states -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(country == "de") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-
-<!-- ``` -->
-
-<!-- ## Get AU states -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(country == "au") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-<!-- AU_states <- ufo_clean %>%  -->
-<!--   filter(country == "au") %>%  -->
-<!--   count(state) %>%  -->
-<!--   pull(state) -->
-
-<!-- ``` -->
-
-<!-- Some overlap with US states. -->
-
-
-<!-- ## Get just unique -->
-
-<!-- The `setdiff()` function can show us what is unique or different for the first of 2 listed sets. -->
-
-<!-- ```{r} -->
-<!-- numbers <-c(1,2,3) -->
-<!-- letters <-c("a", "b", 3) -->
-
-<!-- setdiff(numbers, letters) -->
-<!-- setdiff(letters, numbers) -->
-<!-- ``` -->
-
-<!-- ## Get just unique -->
-
-<!-- <!-- AU_states <- AU_states[!(AU_states %in% US_states)] --> -->
-<!-- <!-- AU_states <- AU_states[!(AU_states %in% GB_states)] --> -->
-<!-- <!-- AU_states <- AU_states[!(AU_states %in% CA_states)] --> -->
-
-<!-- <!-- US_states <- setdiff(US_states, AU_states) --> -->
-<!-- <!-- US_states <- setdiff(US_states, GB_states) --> -->
-<!-- <!-- US_states <- setdiff(US_states, CA_states) --> -->
-
-<!-- ```{r} -->
-<!-- US_states -->
-<!-- c(AU_states, GB_states, CA_states) -->
-<!-- US_states <- setdiff(US_states, c(AU_states, GB_states, CA_states)) -->
-<!-- US_states -->
-<!-- ``` -->
-
-
-<!-- ## Continued -->
-
-<!-- ```{r} -->
-<!-- AU_states <- setdiff(AU_states, c(US_states, GB_states, CA_states)) -->
-
-<!-- CA_states <- setdiff(CA_states, c(US_states, GB_states, AU_states)) -->
-
-<!-- GB_states <- setdiff(GB_states, c(US_states, AU_states, CA_states)) -->
-<!-- ``` -->
-
-<!-- ## How often do rows have a value for country but not a value of "us"? -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>%  -->
-<!--   filter(country != "us" & !is.na(country)) %>%  -->
-<!--   count(country)  -->
-
-<!-- ``` -->
-
-
-
-
-<!-- ## more complicated case_when -->
-
-<!-- Let's make an assumption that if the state value is within the data as a state for a specific country, than it comes from that country for the sake of illustration.  -->
-
-<!-- ```{r} -->
-<!-- ufo_clean <- ufo_clean %>% mutate(prob_country =  -->
-<!--       case_when((is.na(country) & state %in% c(US_states)) ~ "United States", -->
-<!--                 (is.na(country) & state %in% c(CA_states)) ~ "Canada", -->
-<!--                 (is.na(country) & state %in% c(AU_states)) ~ "Australia", -->
-<!--                 (is.na(country) & state %in% c(GB_states)) ~ "Great Britain", -->
-<!--                    TRUE ~ country)) -->
-<!-- ``` -->
-
-<!-- ## results -->
-
-<!-- ```{r} -->
-<!-- count(ufo_clean, prob_country) -->
-<!-- ``` -->
-
-
-<!-- ## results -->
-
-<!-- Take a look at those NAs. -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(is.na(prob_country)) -->
-<!-- ``` -->
-
-
-<!-- ## We could confirm with city info and latitude and longitude -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>% filter(country == "de") %>%  -->
-<!--   pull(city) -->
-<!-- ``` -->
-
-
-<!-- ## Even more specific -->
-
-<!-- ```{r} -->
-<!-- ufo_clean <- ufo_clean %>% mutate(prob_country =  -->
-<!--       case_when( -->
-<!--       (is.na(country) & state %in% c(US_states))  |  -->
-<!--   country == "us" ~ "United States", -->
-<!--       (is.na(country) & state %in% c(CA_states))  |  -->
-<!--   country == "ca" ~ "Canada", -->
-<!--       (is.na(country) & state %in% c(AU_states))  |  -->
-<!--   country == "au" ~ "Australia", -->
-<!--       (is.na(country) & state %in% c(GB_states))  |  -->
-<!--   country == "gb" ~ "Great Britain", -->
-<!--        country == "de" ~ "Germany", -->
-<!--                    TRUE ~ country)) -->
-
-<!-- ``` -->
-
-<!-- We would want to confirm what we recoded with the cities and latitude and longitude, especially to deal with the overlaps in the state lists.  -->
-
-<!-- ## Check counts -->
-
-<!-- ```{r} -->
-<!-- ufo_clean %>%  -->
-<!--   count(country, prob_country) -->
-<!-- ``` -->
-
 ## Summary
 
 - `recode` makes exact swaps
@@ -453,4 +238,217 @@ ufo_clean %>% mutate(country = case_when(
 https://sisbid.github.io/Data-Wrangling/labs/data-cleaning-lab.Rmd
 
 
+## Extra slides
 
+## Strange country values
+
+
+Sometimes `country` is `NA` even though `state` is known.
+A conditional more flexible recoding would be helpful...
+
+
+```{r}
+head(ufo_clean)
+
+```
+
+## Deeper look
+
+Looking at city... it seems like many of these are in fact in the US.
+
+```{r}
+ufo_clean %>% filter(state == "tx") %>% count(country, state)
+ufo_clean %>% filter(state == "tx" & is.na(country)) %>% select(city)
+```
+
+
+## Checkin Utah as well
+
+```{r}
+ufo_clean %>% filter(state == "ut") %>% count(country, state)
+ufo_clean %>% filter(state == "ut" & is.na(country))  %>% select(city)
+```
+
+
+
+## Get US States
+
+```{r}
+ufo_clean %>% filter(country == "us") %>%
+  count(state) %>%
+  pull(state)
+US_states <- ufo_clean %>%
+  filter(country == "us") %>%
+  count(state) %>%
+  pull(state)
+
+```
+
+## Get Canada States
+```{r}
+ufo_clean %>% filter(country == "ca") %>%
+  count(state) %>%
+  pull(state)
+CA_states <- ufo_clean %>%
+  filter(country == "ca") %>%
+  count(state) %>%
+  pull(state)
+
+```
+
+## Get Great Britan states
+
+```{r}
+ufo_clean %>% filter(country == "gb") %>%
+  count(state) %>%
+  pull(state)
+GB_states <- ufo_clean %>%
+  filter(country == "gb") %>%
+  count(state) %>%
+  pull(state)
+
+```
+
+A small overlap with US states.
+
+
+## Get DE states
+
+```{r}
+ufo_clean %>% filter(country == "de") %>%
+  count(state) %>%
+  pull(state)
+
+```
+
+## Get AU states
+
+```{r}
+ufo_clean %>% filter(country == "au") %>%
+  count(state) %>%
+  pull(state)
+AU_states <- ufo_clean %>%
+  filter(country == "au") %>%
+  count(state) %>%
+  pull(state)
+
+```
+
+Some overlap with US states.
+
+
+## Get just unique
+
+The `setdiff()` function can show us what is unique or different for the first of 2 listed sets.
+
+```{r}
+numbers <-c(1,2,3)
+letters <-c("a", "b", 3)
+
+setdiff(numbers, letters)
+setdiff(letters, numbers)
+```
+
+## Get just unique
+
+<!-- AU_states <- AU_states[!(AU_states %in% US_states)] -->
+<!-- AU_states <- AU_states[!(AU_states %in% GB_states)] -->
+<!-- AU_states <- AU_states[!(AU_states %in% CA_states)] -->
+
+<!-- US_states <- setdiff(US_states, AU_states) -->
+<!-- US_states <- setdiff(US_states, GB_states) -->
+<!-- US_states <- setdiff(US_states, CA_states) -->
+
+```{r}
+US_states
+c(AU_states, GB_states, CA_states)
+US_states <- setdiff(US_states, c(AU_states, GB_states, CA_states))
+US_states
+```
+
+
+## Continued
+
+```{r}
+AU_states <- setdiff(AU_states, c(US_states, GB_states, CA_states))
+
+CA_states <- setdiff(CA_states, c(US_states, GB_states, AU_states))
+
+GB_states <- setdiff(GB_states, c(US_states, AU_states, CA_states))
+```
+
+## How often do rows have a value for country but not a value of "us"?
+
+```{r}
+ufo_clean %>%
+  filter(country != "us" & !is.na(country)) %>%
+  count(country)
+
+```
+
+
+
+
+## more complicated case_when
+
+Let's make an assumption that if the state value is within the data as a state for a specific country, than it comes from that country for the sake of illustration.
+
+```{r}
+ufo_clean <- ufo_clean %>% mutate(prob_country =
+      case_when((is.na(country) & state %in% c(US_states)) ~ "United States",
+                (is.na(country) & state %in% c(CA_states)) ~ "Canada",
+                (is.na(country) & state %in% c(AU_states)) ~ "Australia",
+                (is.na(country) & state %in% c(GB_states)) ~ "Great Britain",
+                   TRUE ~ country))
+```
+
+## results
+
+```{r}
+count(ufo_clean, prob_country)
+```
+
+
+## results
+
+Take a look at those NAs.
+
+```{r}
+ufo_clean %>% filter(is.na(prob_country))
+```
+
+
+## We could confirm with city info and latitude and longitude
+
+```{r}
+ufo_clean %>% filter(country == "de") %>%
+  pull(city)
+```
+
+
+## Even more specific
+
+```{r}
+ufo_clean <- ufo_clean %>% mutate(prob_country =
+      case_when(
+      (is.na(country) & state %in% c(US_states))  |
+  country == "us" ~ "United States",
+      (is.na(country) & state %in% c(CA_states))  |
+  country == "ca" ~ "Canada",
+      (is.na(country) & state %in% c(AU_states))  |
+  country == "au" ~ "Australia",
+      (is.na(country) & state %in% c(GB_states))  |
+  country == "gb" ~ "Great Britain",
+       country == "de" ~ "Germany",
+                   TRUE ~ country))
+
+```
+
+We would want to confirm what we recoded with the cities and latitude and longitude, especially to deal with the overlaps in the state lists.
+
+## Check counts
+
+```{r}
+ufo_clean %>%
+  count(country, prob_country)
+```
