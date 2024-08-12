@@ -205,8 +205,8 @@ Use the `sheet` argument to indicate which sheet to pull from. It can refer to t
 
 ```{r eval=FALSE}
 # example:
-read_excel(file = "file.xlsx", sheet = 2)
-read_excel(file = "file.xlsx", sheet = "data")
+read_excel(path = "file.xlsx", sheet = 2)
+read_excel(path = "file.xlsx", sheet = "data")
 ```
 
 
