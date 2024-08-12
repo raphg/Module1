@@ -1,8 +1,8 @@
 ---
 title: "Data Cleaning lab key"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 

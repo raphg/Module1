@@ -30,11 +30,11 @@ ufo <- clean_names(ufo)
 ufo %>% filter(str_detect(duration_hours_min, "min"))%>% nrow()
 ```
 
-3. How accurate is the (formerly-named) `duration (seconds)` column? I.e. how many of the above minutes-scale observations have durations less than 60 seconds or greater than 3600 seconds? 
+3. How accurate is the (formerly-named) `duration (seconds)` column? I.e. how many of the above minutes-scale observations have durations greater than 14400 seconds (or 4 hours)? 
 
 ```{r}
 sub <- ufo %>% filter(str_detect(duration_hours_min, "min"),
-                      duration_seconds<60 | duration_seconds >3600)
+                      duration_seconds >14400)
 nrow(sub)
 ```
 
