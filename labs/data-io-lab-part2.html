@@ -357,22 +357,18 @@ display: none;
 record your commands here. Remember anything you type here can be “sent”
 to the console with Cmd-Enter (OS-X) or Cntr-Enter (Windows/Linux) (But
 only in side the <code>{r}</code> areas).</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(readxl)</code></pre>
 <ol style="list-style-type: decimal">
 <li><p>Read in the the Charm City Circulator Dataset from “<a href="https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv" class="uri">https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv</a>”
 using <code>read_csv</code>, call it <code>circ</code></p></li>
 <li><p>Use a few functions to check out the data (e.g.,
-<code>str()</code>, <code>head()</code>, <code>glimpse()</code>
+<code>head()</code>, <code>glimpse()</code>, <code>str()</code>
 etc.).</p></li>
 <li><p>Write out <code>circ</code> to a file called “Circulator.csv”
 using <code>write_csv</code>.</p></li>
 <li><p>Write out <code>circ</code> to a file called “Circulator.rds”
 using <code>write_rds</code>.</p></li>
-<li><p>Read in the
-<code>https://sisbid.github.io/Data-Wrangling/data/iris_q5.csv</code>
-dataset into the <code>iris_q5</code> R object. Some entries read “-999”
-but are supposed to be missing (the value <code>NA</code> in the
-data).</p></li>
 <li><p>Read in sheet 1 of the <code>iris_q6.xlsx</code> dataset into the
 <code>iris_q6_1</code> R object. How many rows are in the
 dataset?</p></li>

@@ -353,13 +353,33 @@ display: none;
 </div>
 
 
-<pre class="r"><code>library(readr)
-library(readxl)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(readxl)</code></pre>
 <p>This lab uses different versions of the <code>iris</code> dataset.
 You can use links or download them to your machine. Copy the code
-produced by the dropdown menu into the code chunk.</p>
+produced by the dropdown menu into the code chunk. As a reminder the
+steps are:</p>
+<ul>
+<li><code>&gt;</code> File</li>
+<li><code>&gt;</code> Import Dataset</li>
+<li><code>&gt;</code> From Text (<code>readr</code>)</li>
+<li><code>&gt;</code> paste the url</li>
+<li><code>&gt;</code> click “Update” and “Import”</li>
+</ul>
 <p>You can see more about this dataset by running <code>?iris</code> in
 the console.</p>
+<p>If this is review to you, explore the “Import Options” on the bottom
+left of the import dataset menu.</p>
 <ol style="list-style-type: decimal">
 <li><p>Read in the
 <code>https://sisbid.github.io/Data-Wrangling/data/iris/iris_q1.csv</code>

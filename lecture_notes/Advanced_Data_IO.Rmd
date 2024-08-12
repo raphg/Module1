@@ -372,6 +372,7 @@ knitr::include_graphics("media/AdvancedIO_tidycensus.png")
 ```
 
 ## Step 1: DIY
+
 https://github.com/ThatCopy/catAPI/wiki/Usage
 
 ```{r}
@@ -379,26 +380,12 @@ https://github.com/ThatCopy/catAPI/wiki/Usage
 library(httr)
 
 # Requests a random cat fact
-query_url <- "https://thatcopy.pw/catapi/rest/"
+query_url <- "https://catfact.ninja/fact"
 
 req <- GET(query_url)
 content(req)
 ```
 
-## Not all APIs are "open"
-
-https://www.rdocumentation.org/packages/twitteR/versions/1.1.9
-
-```{r, eval = FALSE}
-# install.packages("twitteR")
-library(twitteR)
-# Supplied by Twitter
-setup_twitter_oauth("API key", "API secret")
-
-searchTwitter("crab cake", geocode="39.290692,-76.610221,5mi")
-```
-
-https://developer.twitter.com/en/portal/petition/academic/is-it-right-for-you
 
 ## Not all APIs are "open"
 

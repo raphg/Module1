@@ -365,16 +365,17 @@ using <code>read_csv</code>, call it <code>circ</code></li>
 </ol>
 <pre class="r"><code>circ &lt;- read_csv(&quot;https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv&quot;)</code></pre>
 <pre><code>## Rows: 1146 Columns: 15
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (2): day, date
-## dbl (13): orangeBoardings, orangeAlightings, orangeAverage, purpleBoardings,...
+## dbl (13): orangeBoardings, orangeAlightings, orangeAverage, purpleBoardings, purpleAlightings, purpleAverage, ...
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Use a few functions to check out the data (e.g., <code>str()</code>,
-<code>head()</code>, <code>glimpse()</code> etc.).</li>
+<li>Use a few functions to check out the data (e.g.,
+<code>head()</code>, <code>glimpse()</code>, <code>str()</code>
+etc.).</li>
 </ol>
 <pre class="r"><code>str(circ)</code></pre>
 <pre><code>## spc_tbl_ [1,146 × 15] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
@@ -414,36 +415,34 @@ using <code>read_csv</code>, call it <code>circ</code></li>
 ##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
 <pre class="r"><code>head(circ)</code></pre>
 <pre><code>## # A tibble: 6 × 15
-##   day       date  orangeBoardings orangeAlightings orangeAverage purpleBoardings
-##   &lt;chr&gt;     &lt;chr&gt;           &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;
-## 1 Monday    01/1…             877             1027          952               NA
-## 2 Tuesday   01/1…             777              815          796               NA
-## 3 Wednesday 01/1…            1203             1220         1212.              NA
-## 4 Thursday  01/1…            1194             1233         1214.              NA
-## 5 Friday    01/1…            1645             1643         1644               NA
-## 6 Saturday  01/1…            1457             1524         1490.              NA
-## # ℹ 9 more variables: purpleAlightings &lt;dbl&gt;, purpleAverage &lt;dbl&gt;,
-## #   greenBoardings &lt;dbl&gt;, greenAlightings &lt;dbl&gt;, greenAverage &lt;dbl&gt;,
-## #   bannerBoardings &lt;dbl&gt;, bannerAlightings &lt;dbl&gt;, bannerAverage &lt;dbl&gt;,
-## #   daily &lt;dbl&gt;</code></pre>
+##   day       date     orangeBoardings orangeAlightings orangeAverage purpleBoardings purpleAlightings purpleAverage
+##   &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;
+## 1 Monday    01/11/2…             877             1027          952               NA               NA            NA
+## 2 Tuesday   01/12/2…             777              815          796               NA               NA            NA
+## 3 Wednesday 01/13/2…            1203             1220         1212.              NA               NA            NA
+## 4 Thursday  01/14/2…            1194             1233         1214.              NA               NA            NA
+## 5 Friday    01/15/2…            1645             1643         1644               NA               NA            NA
+## 6 Saturday  01/16/2…            1457             1524         1490.              NA               NA            NA
+## # ℹ 7 more variables: greenBoardings &lt;dbl&gt;, greenAlightings &lt;dbl&gt;, greenAverage &lt;dbl&gt;, bannerBoardings &lt;dbl&gt;,
+## #   bannerAlightings &lt;dbl&gt;, bannerAverage &lt;dbl&gt;, daily &lt;dbl&gt;</code></pre>
 <pre class="r"><code>glimpse(circ)</code></pre>
 <pre><code>## Rows: 1,146
 ## Columns: 15
-## $ day              &lt;chr&gt; &quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday…
-## $ date             &lt;chr&gt; &quot;01/11/2010&quot;, &quot;01/12/2010&quot;, &quot;01/13/2010&quot;, &quot;01/14/2010…
-## $ orangeBoardings  &lt;dbl&gt; 877, 777, 1203, 1194, 1645, 1457, 839, 999, 1023, 137…
-## $ orangeAlightings &lt;dbl&gt; 1027, 815, 1220, 1233, 1643, 1524, 938, 1000, 1047, 1…
-## $ orangeAverage    &lt;dbl&gt; 952.0, 796.0, 1211.5, 1213.5, 1644.0, 1490.5, 888.5, …
-## $ purpleBoardings  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ purpleAlightings &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ purpleAverage    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ greenBoardings   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ greenAlightings  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ greenAverage     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ bannerBoardings  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ bannerAlightings &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ bannerAverage    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ daily            &lt;dbl&gt; 952.0, 796.0, 1211.5, 1213.5, 1644.0, 1490.5, 888.5, …</code></pre>
+## $ day              &lt;chr&gt; &quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;, &quot;Sunday&quot;, &quot;Monday&quot;,…
+## $ date             &lt;chr&gt; &quot;01/11/2010&quot;, &quot;01/12/2010&quot;, &quot;01/13/2010&quot;, &quot;01/14/2010&quot;, &quot;01/15/2010&quot;, &quot;01/16/2010&quot;, &quot;01…
+## $ orangeBoardings  &lt;dbl&gt; 877, 777, 1203, 1194, 1645, 1457, 839, 999, 1023, 1375, 1303, 1401, 1202, 715, 1276, 14…
+## $ orangeAlightings &lt;dbl&gt; 1027, 815, 1220, 1233, 1643, 1524, 938, 1000, 1047, 1416, 1307, 1388, 1210, 711, 1314, …
+## $ orangeAverage    &lt;dbl&gt; 952.0, 796.0, 1211.5, 1213.5, 1644.0, 1490.5, 888.5, 999.5, 1035.0, 1395.5, 1305.0, 139…
+## $ purpleBoardings  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ purpleAlightings &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ purpleAverage    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ greenBoardings   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ greenAlightings  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ greenAverage     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ bannerBoardings  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ bannerAlightings &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ bannerAverage    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ daily            &lt;dbl&gt; 952.0, 796.0, 1211.5, 1213.5, 1644.0, 1490.5, 888.5, 999.5, 1035.0, 1395.5, 1305.0, 139…</code></pre>
 <pre class="r"><code>nrow(circ)</code></pre>
 <pre><code>## [1] 1146</code></pre>
 <ol start="3" style="list-style-type: decimal">
@@ -457,24 +456,6 @@ using <code>read_csv</code>, call it <code>circ</code></li>
 </ol>
 <pre class="r"><code>write_rds(circ, &quot;Circulator.rds&quot;)</code></pre>
 <ol start="5" style="list-style-type: decimal">
-<li>Read in the
-<code>https://sisbid.github.io/Data-Wrangling/data/iris_q5.csv</code>
-dataset into the <code>iris_q5</code> R object. Some entries read “-999”
-but are supposed to be missing (the value <code>NA</code> in the
-data).</li>
-</ol>
-<pre class="r"><code>iris_q5 &lt;- 
-  read_csv(&quot;https://sisbid.github.io/Data-Wrangling/data/iris/iris_q5.csv&quot;,
-           na = &quot;-999&quot;)</code></pre>
-<pre><code>## Rows: 150 Columns: 5
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (1): Species
-## dbl (4): Sepal.Length, Sepal.Width, Petal.Length, Petal.Width
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<ol start="6" style="list-style-type: decimal">
 <li>Read in sheet 1 of the <code>iris_q6.xlsx</code> dataset into the
 <code>iris_q6_1</code> R object. How many rows are in the dataset?</li>
 </ol>
@@ -482,7 +463,7 @@ data).</li>
 iris_q6_1 &lt;- read_excel(&quot;iris_q6.xlsx&quot;, sheet= 1)
 dim(iris_q6_1)</code></pre>
 <pre><code>## [1] 1 2</code></pre>
-<ol start="7" style="list-style-type: decimal">
+<ol start="6" style="list-style-type: decimal">
 <li>Read in sheet 2 of the <code>iris_q6.xlsx</code> dataset into the
 <code>iris_q6_2</code> R object. How many rows are in the dataset?</li>
 </ol>
