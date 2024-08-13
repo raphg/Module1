@@ -55,8 +55,7 @@ Notice the new name is listed **first**!
 </div>
 
 ```{r}
-
-diamonds_2<- diamonds %>%
+diamonds_2 <- diamonds %>%
   rename(depth_percentage = depth)
 head(diamonds_2, n = 3)
 ```
@@ -65,11 +64,10 @@ head(diamonds_2, n = 3)
 ## More Renaming
 
 ```{r}
-diamonds_2<- diamonds %>%
-  rename(depth_percentage = depth,
-                   length = x,
-                    width = y,
-                    depth = z)
+diamonds_2<- diamonds_2 %>%
+        rename(length = x,
+                width = y,
+                depth = z)
 glimpse(diamonds_2)
 ```
 
@@ -165,15 +163,15 @@ diamonds %>% select(where(is.numeric)) %>% head(n = 2)
 
 ```
 
-## The `where()` function can help select columns of a specific class
+<!-- ## The `where()` function can help select columns of a specific class -->
 
-`is.character()` and `is.numeric()` are often the most helpful
+<!-- `is.character()` and `is.numeric()` are often the most helpful -->
 
-```{r}
-head(diamonds, 2)
-diamonds %>% select(where(is.ordered)) %>% head(n = 2)
+<!-- ```{r} -->
+<!-- head(diamonds, 2) -->
+<!-- diamonds %>% select(where(is.ordered)) %>% head(n = 2) -->
 
-```
+<!-- ``` -->
 
 
 ## `distinct()` function
@@ -199,11 +197,11 @@ The `mutate` function in `dplyr` allows you to add or modify columns of a data f
 ```
 </div>
 
-1 US dollar = 1.32 Canadian dollars
+1 US dollar = 1.37 Canadian dollars
 
 ```{r}
 diamonds %>% 
-  mutate(price_canadian = price * 1.32) %>% glimpse()
+  mutate(price_canadian = price * 1.37) %>% glimpse()
 
 ```
 
@@ -334,9 +332,17 @@ diamonds %>% arrange(desc(price))
 
 ## Ordering the rows of a data frame: dplyr
 
-You can combine increasing and decreasing orderings:
+You can combine increasing and decreasing orderings. The first listed gets priority.
 ```{r}
 arrange(diamonds, desc(carat), table)
+```
+
+## Ordering the rows of a data frame: dplyr
+
+You can combine increasing and decreasing orderings. The first listed gets priority. Here `table` is prioritized.
+
+```{r}
+arrange(diamonds, table, desc(carat))
 ```
 
 ## Summary
@@ -344,13 +350,12 @@ arrange(diamonds, desc(carat), table)
 - `rename` can change a name - new name = old name
 - `clean_names` of the janitor package can change many names
 - `select()` and `relocate()` can be used to reorder columns
-- `arrange()` can be used to reorder rows
-- can arrange in descending order with `desc()`
-- can remove rows with `filter()`
 - can remove a column in a few ways:
     - using `select()` with negative sign in front of column name(s)
     - jut not selecting it
 - `mutate()` can be used to modify an existing variable or make a new variable
+- `arrange()` can be used to reorder rows
+- can arrange in descending order with `desc()`
 
 
 ## Lab

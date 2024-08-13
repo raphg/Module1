@@ -3068,18 +3068,21 @@ var loadDeck = function(event) {
   });
 };
 
-if (document.readyState !== "loading" &&
-    document.querySelector('slides') === null) { 
-  // if the document is done loading but our element hasn't yet appeared, defer
-  // loading of the deck
-  window.setTimeout(function() {
-    loadDeck(null);
-  }, 0);
-} else {
-  // still loading the DOM, so wait until it's finished
-  document.addEventListener("DOMContentLoaded", loadDeck);
-}
+if (!window.Shiny) {
+  // If Shiny is loaded, the slide deck is initialized in ioslides template
 
+  if (document.readyState !== "loading" &&
+      document.querySelector('slides') === null) {
+    // if the document is done loading but our element hasn't yet appeared, defer
+    // loading of the deck
+    window.setTimeout(function() {
+      loadDeck(null);
+    }, 0);
+  } else {
+    // still loading the DOM, so wait until it's finished
+    document.addEventListener("DOMContentLoaded", loadDeck);
+  }
+}
 
 
 </script>
@@ -3122,7 +3125,7 @@ div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -3291,7 +3294,7 @@ head(diamonds)</pre>
 {data you are creating or changing} &lt;- {data you are using} %&gt;%
                                     rename({New Name} = {Old name})</pre></div>
 
-<pre class = 'prettyprint lang-r'>diamonds_2&lt;- diamonds %&gt;%
+<pre class = 'prettyprint lang-r'>diamonds_2 &lt;- diamonds %&gt;%
   rename(depth_percentage = depth)
 head(diamonds_2, n = 3)</pre>
 
@@ -3304,11 +3307,10 @@ head(diamonds_2, n = 3)</pre>
 
 </article></slide><slide class=""><hgroup><h2>More Renaming</h2></hgroup><article  id="more-renaming">
 
-<pre class = 'prettyprint lang-r'>diamonds_2&lt;- diamonds %&gt;%
-  rename(depth_percentage = depth,
-                   length = x,
-                    width = y,
-                    depth = z)
+<pre class = 'prettyprint lang-r'>diamonds_2&lt;- diamonds_2 %&gt;%
+        rename(length = x,
+                width = y,
+                depth = z)
 glimpse(diamonds_2)</pre>
 
 <pre >Rows: 53,940
@@ -3380,20 +3382,20 @@ $ `Depth percentage`     &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2
         rename(price = `Price(in US dollars)`)</pre>
 
 <pre ># A tibble: 53,940 × 10
-   carat cut       color clarity depth table price Length (in …¹ Width…² Depth…³
-   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;         &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
- 1  0.23 Ideal     E     SI2      61.5    55   326          3.95    3.98    2.43
- 2  0.21 Premium   E     SI1      59.8    61   326          3.89    3.84    2.31
- 3  0.23 Good      E     VS1      56.9    65   327          4.05    4.07    2.31
- 4  0.29 Premium   I     VS2      62.4    58   334          4.2     4.23    2.63
- 5  0.31 Good      J     SI2      63.3    58   335          4.34    4.35    2.75
- 6  0.24 Very Good J     VVS2     62.8    57   336          3.94    3.96    2.48
- 7  0.24 Very Good I     VVS1     62.3    57   336          3.95    3.98    2.47
- 8  0.26 Very Good H     SI1      61.9    55   337          4.07    4.11    2.53
- 9  0.22 Fair      E     VS2      65.1    61   337          3.87    3.78    2.49
-10  0.23 Very Good H     VS1      59.4    61   338          4       4.05    2.39
-# … with 53,930 more rows, and abbreviated variable names ¹​`Length (in mm)`,
-#   ²​`Width in mm`, ³​`Depth percentage`</pre>
+   carat cut      color clarity depth table price `Length (in mm)` `Width in mm`
+   &lt;dbl&gt; &lt;ord&gt;    &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;            &lt;dbl&gt;         &lt;dbl&gt;
+ 1  0.23 Ideal    E     SI2      61.5    55   326             3.95          3.98
+ 2  0.21 Premium  E     SI1      59.8    61   326             3.89          3.84
+ 3  0.23 Good     E     VS1      56.9    65   327             4.05          4.07
+ 4  0.29 Premium  I     VS2      62.4    58   334             4.2           4.23
+ 5  0.31 Good     J     SI2      63.3    58   335             4.34          4.35
+ 6  0.24 Very Go… J     VVS2     62.8    57   336             3.94          3.96
+ 7  0.24 Very Go… I     VVS1     62.3    57   336             3.95          3.98
+ 8  0.26 Very Go… H     SI1      61.9    55   337             4.07          4.11
+ 9  0.22 Fair     E     VS2      65.1    61   337             3.87          3.78
+10  0.23 Very Go… H     VS1      59.4    61   338             4             4.05
+# ℹ 53,930 more rows
+# ℹ 1 more variable: `Depth percentage` &lt;dbl&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Renaming all columns of a data frame: dplyr</h2></hgroup><article  id="renaming-all-columns-of-a-data-frame-dplyr" class="codesmall">
 
@@ -3457,25 +3459,17 @@ $ depth_percentage    &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53
 1  0.23  61.5    55   326  3.95  3.98  2.43
 2  0.21  59.8    61   326  3.89  3.84  2.31</pre>
 
-</article></slide><slide class=""><hgroup><h2>The <code>where()</code> function can help select columns of a specific class</h2></hgroup><article  id="the-where-function-can-help-select-columns-of-a-specific-class-1">
+<!-- ## The `where()` function can help select columns of a specific class -->
 
-<p><code>is.character()</code> and <code>is.numeric()</code> are often the most helpful</p>
+<!-- `is.character()` and `is.numeric()` are often the most helpful -->
 
-<pre class = 'prettyprint lang-r'>head(diamonds, 2)</pre>
+<!-- ```{r} -->
 
-<pre ># A tibble: 2 × 10
-  carat cut     color clarity depth table price     x     y     z
-  &lt;dbl&gt; &lt;ord&gt;   &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1  0.23 Ideal   E     SI2      61.5    55   326  3.95  3.98  2.43
-2  0.21 Premium E     SI1      59.8    61   326  3.89  3.84  2.31</pre>
+<!-- head(diamonds, 2) -->
 
-<pre class = 'prettyprint lang-r'>diamonds %&gt;% select(where(is.ordered)) %&gt;% head(n = 2)</pre>
+<!-- diamonds %>% select(where(is.ordered)) %>% head(n = 2) -->
 
-<pre ># A tibble: 2 × 3
-  cut     color clarity
-  &lt;ord&gt;   &lt;ord&gt; &lt;ord&gt;  
-1 Ideal   E     SI2    
-2 Premium E     SI1    </pre>
+<!-- ``` -->
 
 </article></slide><slide class=""><hgroup><h2><code>distinct()</code> function</h2></hgroup><article  id="distinct-function">
 
@@ -3503,10 +3497,10 @@ $ depth_percentage    &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53
 {data object to update} &lt;- {data to use} %&gt;% 
                     mutate({new variable name} = {new variable source}) </pre></div>
 
-<p>1 US dollar = 1.32 Canadian dollars</p>
+<p>1 US dollar = 1.37 Canadian dollars</p>
 
 <pre class = 'prettyprint lang-r'>diamonds %&gt;% 
-  mutate(price_canadian = price * 1.32) %&gt;% glimpse()</pre>
+  mutate(price_canadian = price * 1.37) %&gt;% glimpse()</pre>
 
 <pre >Rows: 53,940
 Columns: 11
@@ -3520,7 +3514,7 @@ $ price          &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 3
 $ x              &lt;dbl&gt; 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, 4…
 $ y              &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4…
 $ z              &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2…
-$ price_canadian &lt;dbl&gt; 430.32, 430.32, 431.64, 440.88, 442.20, 443.52, 443.52,…</pre>
+$ price_canadian &lt;dbl&gt; 446.62, 446.62, 447.99, 457.58, 458.95, 460.32, 460.32,…</pre>
 
 </article></slide><slide class=""><hgroup><h2>Use mutate to modify existing columns</h2></hgroup><article  id="use-mutate-to-modify-existing-columns" class="codesmall">
 
@@ -3697,7 +3691,7 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
  8  0.26 SI1     H     Very Good  61.9   337    55  4.07  4.11  2.53
  9  0.22 VS2     E     Fair       65.1   337    61  3.87  3.78  2.49
 10  0.23 VS1     H     Very Good  59.4   338    61  4     4.05  2.39
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Ordering rows</h2></hgroup><article  id="ordering-rows">
 
@@ -3720,7 +3714,7 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
  8  0.98 Fair  H     SI2      67.9    60  2777  6.05  5.97  4.08
  9  0.84 Fair  G     SI1      55.1    67  2782  6.39  6.2   3.47
 10  1.01 Fair  E     I1       64.5    58  2788  6.29  6.21  4.03
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Ordering the rows of a data frame: dplyr</h2></hgroup><article  id="ordering-the-rows-of-a-data-frame-dplyr-1">
 
@@ -3741,7 +3735,7 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
  8  0.56 Fair  H     VS2      52.7    70  1293  5.71  5.57  2.97
  9  1.02 Fair  I     SI1      53      63  2856  6.84  6.77  3.66
 10  0.96 Fair  E     SI2      53.1    63  2815  6.73  6.65  3.55
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Ordering the rows of a data frame: dplyr</h2></hgroup><article  id="ordering-the-rows-of-a-data-frame-dplyr-2">
 
@@ -3762,11 +3756,11 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
  8  2    Premium   I     VS1      60.8    59 18795  8.13  8.02  4.91
  9  1.71 Premium   F     VS2      62.3    59 18791  7.57  7.53  4.7 
 10  2.15 Ideal     G     SI2      62.6    54 18791  8.29  8.35  5.21
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Ordering the rows of a data frame: dplyr</h2></hgroup><article  id="ordering-the-rows-of-a-data-frame-dplyr-3">
 
-<p>You can combine increasing and decreasing orderings:</p>
+<p>You can combine increasing and decreasing orderings. The first listed gets priority.</p>
 
 <pre class = 'prettyprint lang-r'>arrange(diamonds, desc(carat), table)</pre>
 
@@ -3783,7 +3777,28 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
  8  3.65 Fair      H     I1       67.1    53 11668  9.53  9.48  6.38
  9  3.51 Premium   J     VS2      62.5    59 18701  9.66  9.63  6.03
 10  3.5  Ideal     H     I1       62.8    57 12587  9.65  9.59  6.03
-# … with 53,930 more rows</pre>
+# ℹ 53,930 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2>Ordering the rows of a data frame: dplyr</h2></hgroup><article  id="ordering-the-rows-of-a-data-frame-dplyr-4">
+
+<p>You can combine increasing and decreasing orderings. The first listed gets priority. Here <code>table</code> is prioritized.</p>
+
+<pre class = 'prettyprint lang-r'>arrange(diamonds, table, desc(carat))</pre>
+
+<pre ># A tibble: 53,940 × 10
+   carat cut       color clarity depth table price     x     y     z
+   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1  1.04 Ideal     I     VS1      62.9  43    4997  6.45  6.41  4.04
+ 2  0.29 Very Good E     VS1      62.8  44     474  4.2   4.24  2.65
+ 3  1    Fair      I     VS1      64    49    3951  6.43  6.39  4.1 
+ 4  0.3  Fair      E     SI1      64.5  49     630  4.28  4.25  2.75
+ 5  2    Fair      H     SI1      61.2  50   13764  8.17  8.08  4.97
+ 6  1.02 Fair      F     SI1      61.8  50    4227  6.59  6.51  4.05
+ 7  0.94 Fair      H     SI2      66    50.1  3353  6.13  6.17  4.06
+ 8  2.01 Good      H     SI2      64    51   15888  8.08  8.01  5.15
+ 9  1    Premium   H     SI1      62.2  51    3511  6.47  6.4   4   
+10  1    Fair      E     VS2      66.4  51    4480  6.31  6.22  4.16
+# ℹ 53,930 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Summary</h2></hgroup><article  id="summary">
 
@@ -3791,9 +3806,6 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
 <li><code>rename</code> can change a name - new name = old name</li>
 <li><code>clean_names</code> of the janitor package can change many names</li>
 <li><code>select()</code> and <code>relocate()</code> can be used to reorder columns</li>
-<li><code>arrange()</code> can be used to reorder rows</li>
-<li>can arrange in descending order with <code>desc()</code></li>
-<li>can remove rows with <code>filter()</code></li>
 <li>can remove a column in a few ways:
 
 <ul>
@@ -3801,6 +3813,8 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
 <li>jut not selecting it</li>
 </ul></li>
 <li><code>mutate()</code> can be used to modify an existing variable or make a new variable</li>
+<li><code>arrange()</code> can be used to reorder rows</li>
+<li>can arrange in descending order with <code>desc()</code></li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Lab</h2></hgroup><article  id="lab">
@@ -3832,6 +3846,11 @@ $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340
        window.jQuery(document).on('slideenter', function(e) {
          window.jQuery(e.target).trigger('shown');
       });
+    }
+    if (window.Shiny) {
+      // Initialize slides when this script appears on the page, since it
+      // indicates that the <slides> markup has been fully loaded.
+      window.loadDeck();
     }
   })();
 </script>
