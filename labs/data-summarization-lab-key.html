@@ -357,101 +357,115 @@ display: none;
 <h2>Data used</h2>
 <p>Circulator Lanes Dataset: the data is from <a href="https://data.baltimorecity.gov/Transportation/Charm-City-Circulator-Ridership/wwvu-583r" class="uri">https://data.baltimorecity.gov/Transportation/Charm-City-Circulator-Ridership/wwvu-583r</a></p>
 <p>Available on: <a href="https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv" class="uri">https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv</a></p>
-<pre class="r"><code>library(tidyverse)
-
-circ &lt;- read_csv(&quot;https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv&quot;)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>circ &lt;- read_csv(&quot;https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv&quot;)</code></pre>
+<pre><code>## Rows: 1146 Columns: 15
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (2): day, date
+## dbl (13): orangeBoardings, orangeAlightings, orangeAverage, purpleBoardings,...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <ol style="list-style-type: decimal">
-<li>How many days are in the data set? You can assume each
-observation/row is a different day (hint: get the number of rows).</li>
+<li>Each row is a different day. How many days are in the data set?</li>
 </ol>
 <pre class="r"><code>nrow(circ)</code></pre>
-<pre><code>[1] 1146</code></pre>
+<pre><code>## [1] 1146</code></pre>
 <pre class="r"><code>dim(circ)</code></pre>
-<pre><code>[1] 1146   15</code></pre>
+<pre><code>## [1] 1146   15</code></pre>
 <pre class="r"><code>circ %&gt;% 
   nrow()</code></pre>
-<pre><code>[1] 1146</code></pre>
+<pre><code>## [1] 1146</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>What is the total (sum) number of boardings on the green bus
 (<code>greenBoardings</code> column)?</li>
 </ol>
 <pre class="r"><code>sum(circ$greenBoardings, na.rm = TRUE)</code></pre>
-<pre><code>[1] 935564</code></pre>
+<pre><code>## [1] 935564</code></pre>
 <pre class="r"><code>circ %&gt;% pull(greenBoardings) %&gt;% sum(na.rm = TRUE)</code></pre>
-<pre><code>[1] 935564</code></pre>
+<pre><code>## [1] 935564</code></pre>
 <pre class="r"><code>count(circ, wt = greenBoardings)</code></pre>
-<pre><code># A tibble: 1 × 1
-       n
-   &lt;dbl&gt;
-1 935564</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##        n
+##    &lt;dbl&gt;
+## 1 935564</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>How many days are missing daily ridership (<code>daily</code>
 column)? Use <code>is.na()</code> and <code>sum()</code>.</li>
 </ol>
 <pre class="r"><code>daily &lt;- circ %&gt;% pull(daily)
 sum(is.na(daily))</code></pre>
-<pre><code>[1] 124</code></pre>
+<pre><code>## [1] 124</code></pre>
 <pre class="r"><code># Can also
 circ %&gt;% 
   count(is.na(daily))</code></pre>
-<pre><code># A tibble: 2 × 2
-  `is.na(daily)`     n
-  &lt;lgl&gt;          &lt;int&gt;
-1 FALSE           1022
-2 TRUE             124</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   `is.na(daily)`     n
+##   &lt;lgl&gt;          &lt;int&gt;
+## 1 FALSE           1022
+## 2 TRUE             124</code></pre>
 <ol start="4" style="list-style-type: decimal">
-<li>Group the data by day of the week (<code>day</code>). Next, find the
-mean daily ridership (<code>daily</code> column) and the sample size.
-(hint: use <code>group_by</code> and <code>summarize</code>
-functions)</li>
+<li>Group the data by day of the week (<code>day</code>). Find the mean
+daily ridership (<code>daily</code> column). (hint: use
+<code>group_by</code> and <code>summarize</code> functions)</li>
 </ol>
 <pre class="r"><code>circ %&gt;% 
   group_by(day) %&gt;% 
-  summarise(mean = mean(daily, na.rm = TRUE),
-            n = n())</code></pre>
-<pre><code># A tibble: 7 × 3
-  day        mean     n
-  &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt;
-1 Friday    8961.   164
-2 Monday    7340.   164
-3 Saturday  6743.   163
-4 Sunday    4531.   163
-5 Thursday  7639.   164
-6 Tuesday   7642.   164
-7 Wednesday 7779.   164</code></pre>
+  summarize(mean = mean(daily, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 7 × 2
+##   day        mean
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 Friday    8961.
+## 2 Monday    7340.
+## 3 Saturday  6743.
+## 4 Sunday    4531.
+## 5 Thursday  7639.
+## 6 Tuesday   7642.
+## 7 Wednesday 7779.</code></pre>
 </div>
-<div id="extra-practice" class="section level2">
-<h2><strong>Extra practice:</strong></h2>
+<div id="practice-on-your-own" class="section level2">
+<h2><strong>Practice on your own</strong></h2>
 <ol start="5" style="list-style-type: decimal">
 <li>What is the median of <code>orangeBoardings</code>(use
 <code>median()</code>).</li>
 </ol>
 <pre class="r"><code>circ %&gt;% 
-  summarise(median = median(orangeBoardings, na.rm = TRUE))</code></pre>
-<pre><code># A tibble: 1 × 1
-  median
-   &lt;dbl&gt;
-1   3074</code></pre>
+  summarize(median = median(orangeBoardings, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   median
+##    &lt;dbl&gt;
+## 1   3074</code></pre>
 <pre class="r"><code># OR 
 circ %&gt;% pull(orangeBoardings) %&gt;% median(na.rm = TRUE)</code></pre>
-<pre><code>[1] 3074</code></pre>
+<pre><code>## [1] 3074</code></pre>
 <ol start="6" style="list-style-type: decimal">
 <li>Take the median of <code>orangeBoardings</code>(use
-<code>median()</code>), but this time stratify by day of the week.</li>
+<code>median()</code>), but this time group by day of the week.</li>
 </ol>
 <pre class="r"><code>circ %&gt;% 
   group_by(day) %&gt;% 
-  summarise(median = median(orangeBoardings, na.rm = TRUE))</code></pre>
-<pre><code># A tibble: 7 × 2
-  day       median
-  &lt;chr&gt;      &lt;dbl&gt;
-1 Friday     4014.
-2 Monday     3336 
-3 Saturday   2963 
-4 Sunday     1900 
-5 Thursday   3485 
-6 Tuesday    3484 
-7 Wednesday  3576 </code></pre>
+  summarize(median = median(orangeBoardings, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 7 × 2
+##   day       median
+##   &lt;chr&gt;      &lt;dbl&gt;
+## 1 Friday     4014.
+## 2 Monday     3336 
+## 3 Saturday   2963 
+## 4 Sunday     1900 
+## 5 Thursday   3485 
+## 6 Tuesday    3484 
+## 7 Wednesday  3576</code></pre>
 </div>
 
 
