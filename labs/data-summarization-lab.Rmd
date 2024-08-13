@@ -21,7 +21,7 @@ library(tidyverse)
 circ <- read_csv("https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circulator_Ridership.csv")
 ```
 
-1. How many days are in the data set?  You can assume each observation/row is a different day (hint: get the number of rows).
+1. Each row is a different day. How many days are in the data set?
 
 ```{r q1}
 
@@ -39,13 +39,13 @@ circ <- read_csv("https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circul
 
 ```
 
-4. Group the data by day of the week (`day`). Next, find the mean daily ridership (`daily` column) and the sample size. (hint: use `group_by` and `summarize` functions)
+4. Group the data by day of the week (`day`). Find the mean daily ridership (`daily` column). (hint: use `group_by` and `summarize` functions)
 
 ```{r q4}
 
 ```
 
-## **Extra practice:**
+## **Practice on your own**
 
 5. What is the median of `orangeBoardings`(use `median()`).
 
@@ -53,7 +53,7 @@ circ <- read_csv("https://sisbid.github.io/Data-Wrangling/data/Charm_City_Circul
 
 ```
 
-6. Take the median of `orangeBoardings`(use `median()`), but this time stratify by day of the week.
+6. Take the median of `orangeBoardings`(use `median()`), but this time group by day of the week.
 
 ```{r q7}
 
