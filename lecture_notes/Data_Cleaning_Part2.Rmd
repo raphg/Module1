@@ -20,18 +20,20 @@ opts_chunk$set(comment = "")
 
 ## Example of Cleaning: more complicated
 
-For example, let's say gender was coded as Male, M, m, Female, F, f.  Using Excel to find all of these would be a matter of filtering and changing all by hand or using if statements.
+For example, let's say we have a variable about treatment or control conditions coded as treatment, T, treat, Treat, C, Cont, cont, cOnt, Control, and control. Using Excel to find all of these would be a matter of filtering and changing all by hand or using if statements.
 
 Sometimes though, it's not so simple.  That's where functions that find patterns come to be very useful.
 
 ```{r gender, echo=FALSE}
 set.seed(4) # random sample below - make sure same every time
-gender <- sample(c("Male", "mAle", "MaLe", "M", "MALE", "Ma", "FeMAle", "F", "Woman", "Man", "Fm", "FEMALE"), 1000, replace = TRUE)
-data_gen = tibble(gender)
+status <- sample(c("treatment", "T", "treat", "Traet", "Treat", "C", "Cont", "cont", "cOnt", "Control", "control"), 1000, replace = TRUE)
+data_gen = tibble(status)
 ```
 
+## Take a look at the data
+
 ```{r gentab}
-table(gender)
+count(data_gen, status)
 ```
 
 ## Example of Cleaning: more complicated
@@ -39,14 +41,15 @@ In R, you could use `case_when()`:
 
 ```{r}
 #case_when way:
-data_gen <-data_gen %>% mutate(gender = 
-                      case_when(gender %in% c("Male", "M", "m", "Man")
-                                ~ "Male",
-                           TRUE ~ gender)) 
-head(data_gen)
+data_gen <-data_gen %>% mutate(status = 
+            case_when(status 
+                        %in% c("C", "cont", "cOnt", "Cont", "control", "Control")
+                                ~ "Control",
+                           TRUE ~ status)) 
+count(data_gen, status)
 ```
 
-Oh dear! This only fixes some values! It is difficult to notice values like `"MaLe"`.
+Oh dear! This only fixes some values! It is difficult to notice values like `"Traet"`.
 
 # String functions
 
@@ -80,15 +83,25 @@ Useful String functions from base R and `stringr`
 ```{r}
 #case_when way:
 data_gen <-data_gen %>%
-                mutate(gender = str_to_sentence(gender)) %>%
-                mutate(gender = 
-                      case_when(gender %in% c("Male", "M", "m", "Man")
-                                ~ "Male",
-                           TRUE ~ gender)) 
-head(data_gen)
+                mutate(status = str_to_sentence(status))
+count(data_gen, status)
 ```
-OK, now we are getting somewhere!
 
+
+## recoding with `str_to_sentence()`
+
+```{r}
+#case_when way:
+data_gen <-data_gen %>%
+                mutate(status = str_to_sentence(status)) %>%
+                mutate(status = 
+                      case_when(status %in% c("Treatment", "T", "Treat", "Traet", "Treat")
+                                ~ "Treatment",
+                           TRUE ~ status)) 
+count(data_gen, status)
+```
+
+OK, now we are getting somewhere!
 
 
 ## Reading in again
@@ -143,15 +156,15 @@ glimpse(ufo_clean)
 ```
 
 
-## Paste can add things back to variables
+<!-- ## Paste can add things back to variables -->
 
-```{r}
-ufo_clean %>% 
-  mutate(duration_seconds = 
-           paste(duration_seconds, "sec", sep = " ")) %>% 
-  glimpse()
+<!-- ```{r} -->
+<!-- ufo_clean %>%  -->
+<!--   mutate(duration_seconds =  -->
+<!--            paste(duration_seconds, "sec", sep = " ")) %>%  -->
+<!--   glimpse() -->
 
-```
+<!-- ``` -->
 
 
 ## Substringing
@@ -187,7 +200,7 @@ str_sub(c("Site A", "Site B", "Site C"), 6,6)
 * They can use to match a large number of strings in one statement
 * `.` matches any single character
 * `*` means repeat as many (even if 0) more times the last character
-* `?` makes the last thing optional
+* `?` makes a pattern optional (i.e. it matches 0 or 1 times)
 * `^` matches start of vector `^a` - starts with "a"
 * `$` matches end of vector `b$` - ends with "b"
 
@@ -196,8 +209,8 @@ str_sub(c("Site A", "Site B", "Site C"), 6,6)
 `str_detect`, `str_subset`, `str_replace`, and `str_replace_all` search for matches to argument pattern within each element of a character vector: they differ in the format of and amount of detail in the results. 
 
 * `str_detect` - returns `TRUE` if `pattern` is found
-* `str_subset` - returns only the strings which pattern were detected
-* `str_extract` - returns only the pattern which were detected
+* `str_subset` - returns only the strings where the pattern were detected
+* `str_extract` - returns only the pattern that was detected
 * `str_replace` - replaces `pattern` with `replacement` the first time
 * `str_replace_all` - replaces `pattern` with `replacement` as many times matched
 
@@ -248,7 +261,7 @@ ufo_clean %>% pull(comments) %>%
 
 ```{r ggrep2}
 ufo_clean %>% 
-  mutate(aliens  = str_extract(comments, "aliens")) %>%
+  mutate(aliens  = str_extract(comments, "two aliens")) %>%
   count(aliens)
 
 ```
@@ -267,15 +280,22 @@ That contains space then ship maybe with stuff in between
 ufo_clean %>% pull(comments) %>%
   str_subset("space.?ship") %>% head(4) # gets "spaceship" or "space ship" or...
 ufo_clean %>% pull(comments) %>% 
-  str_subset("space.ship") %>% head(4) # no "spaceship" must have character in bw
+  str_subset("space.ship") %>% head(4) # no "spaceship" must have character in between
 
+```
+
+## time information
+
+```{r}
+
+pull(ufo_clean, duration_hours_min) %>% head(n = 20)
 ```
 
 ## str_replace()
 
 
 Let's say we wanted to make the time information more consistent. 
-Using `case_when()` would be very tedious and error-prone!
+Using `case_when()` could be very tedious and error-prone!
 
 We can use `str_replace()` to do so.
 
@@ -302,11 +322,13 @@ ufo_clean %>% separate(duration_hours_min,
 As you can see there is still plenty of cleaning to do!
 
 
+## more seperating
+
 ```{r, warning=FALSE }
-ufo_clean %>% separate(date_posted,
-                 into = c("date_posted", "time_posted"),
-                 sep = " ") %>%
-  select(date_posted, time_posted) %>% head()
+ufo_clean <- ufo_clean %>% separate(datetime,
+                 into = c("date", "time"),
+                 sep = " ")
+ufo_clean %>% select(date, time) %>% head()
 ```
 
 ## Dates and times{.smaller}
@@ -317,7 +339,7 @@ Most important functions are those that look like ymd or mdy etc. They specify h
 ```{r, message = FALSE}
 library(lubridate)#need to load this one!
 
-ufo_clean <- ufo_clean %>% mutate(date_posted = mdy(date_posted))
+ufo_clean <- ufo_clean %>% mutate(date = mdy(date))
 head(ufo_clean)
 ```
 
@@ -356,6 +378,8 @@ head(ufo_clean)
 <!-- ```{r} -->
 <!-- parse_number(c("12,123,123.00", "12,465.10")) -->
 <!-- ``` -->
+
+## str_*functions
 
 ```{r}
 str_detect(string = c("abcdd", "two"), pattern = "dd")
