@@ -20,7 +20,7 @@ library(tidyverse)
 chicks <- datasets::ChickWeight
 ```
 
-1. Reshape to wide format using `pivot_wider`. Use the arguments `names_from = Time` and `values_from = weight`. Include a the following in the `pivot_wider` function: `names_prefix = "Time_"` to update all the new column names. Call the new data `chicks_wide`.
+1. Reshape to wide format using `pivot_wider`. Use the arguments `names_from = Time` and `values_from = weight`. Include the following in the `pivot_wider` function: `names_prefix = "Time_"` to update all the new column names. Call the new data `chicks_wide`.
 
 ```{r}
 chicks_wide <- chicks %>% pivot_wider(names_from = Time, values_from = weight, names_prefix = "Time_")
