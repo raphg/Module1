@@ -41,8 +41,8 @@ data_As <- tibble(
   May_vacc_rate = c(0.514, 0.626)
 )
 data_cold <- tibble(
-  State = c("Maine", "Alaska"),
-  April_vacc_rate = c(0.795, 0.623)
+  State = c("Maine", "Alaska", "Vermont"),
+  April_vacc_rate = c(0.795, 0.623, 0.82)
 )
 ```
 
@@ -55,15 +55,25 @@ data_cold
 
 https://github.com/gadenbuie/tidyexplain/blob/main/images/inner-join.gif
 
-```{r, fig.alt="A gif showing the inner joining of two simple datasets.", out.width = "40%", echo = FALSE, align = "center"}
+```{r, fig.alt="A gif showing the inner joining of two simple datasets.", out.width = "40%", echo = FALSE}
 knitr::include_graphics("media/Join_inner-join.gif")
 ```
 
+
+
 ## Inner Join
 
-```{r inner_join}
-ij <- inner_join(data_As, data_cold)
-ij
+```{r,  out.width = "50%", echo = FALSE, fig.show='hold'}
+include_graphics("../images/joining_data.png")
+include_graphics("../images/inner.png")
+```
+
+
+## Inner Join
+
+```{r}
+lj <- inner_join(data_As, data_cold)
+lj
 ```
 
 ## Left Join
@@ -74,6 +84,14 @@ https://raw.githubusercontent.com/gadenbuie/tidyexplain/main/images/left-join.gi
 knitr::include_graphics("media/Join_left-join.gif")
 ```
 
+
+## Left Join
+
+```{r,  out.width = "50%", echo = FALSE, fig.show='hold'}
+include_graphics("../images/joining_data.png")
+include_graphics("../images/left.png")
+```
+
 ## Left Join
 
 ```{r left_join}
@@ -82,6 +100,8 @@ lj
 ```
 
 ## Install `tidylog` package to log outputs
+
+Numbers in parentheses indicate that these rows are not included in the result.
 
 ```{r, include=FALSE}
 # install.packages("tidylog")
@@ -104,6 +124,13 @@ knitr::include_graphics("media/Join_right-join.gif")
 
 ## Right Join
 
+```{r,  out.width = "50%", echo = FALSE, fig.show='hold'}
+include_graphics("../images/joining_data.png")
+include_graphics("../images/right.png")
+```
+
+## Right Join
+
 ```{r right_join}
 rj <- right_join(data_As, data_cold)
 rj
@@ -122,6 +149,13 @@ https://raw.githubusercontent.com/gadenbuie/tidyexplain/main/images/full-join.gi
 
 ```{r, fig.alt="A gif showing the full joining of two simple datasets.", out.width = "40%", echo = FALSE, align = "center"}
 knitr::include_graphics("media/Join_full-join.gif")
+```
+
+## Full Join
+
+```{r,  out.width = "50%", echo = FALSE, fig.show='hold'}
+include_graphics("../images/joining_data.png")
+include_graphics("../images/full.png")
 ```
 
 ## Full Join
@@ -170,6 +204,14 @@ https://github.com/gadenbuie/tidyexplain/blob/main/images/left-join-extra.gif
 
 ```{r, fig.alt="A gif showing how data can be duplicated from one dataset when joining two simple datasets.", out.width = "40%", echo = FALSE, align = "center"}
 knitr::include_graphics("media/Join_left_join_extra.gif")
+```
+
+## Regular left join
+
+https://raw.githubusercontent.com/gadenbuie/tidyexplain/main/images/left-join.gif
+
+```{r, fig.alt="A gif showing the left joining of two simple datasets.", out.width = "40%", echo = FALSE, align = "center"}
+knitr::include_graphics("media/Join_left-join.gif")
 ```
 
 ## Stop `tidylog`
@@ -230,18 +272,59 @@ rbind(data_As, data_cold)
 ```{r}
 bind_rows(data_As, data_cold)
 ```
+## bind_rows vs full join
 
-## Other stuff: `anti_join` (`dplyr`) {.codesmall}
+```{r}
+full_join(data_As, data_cold)
+```
+
+
+## Other stuff: `anti_join` (`dplyr`)
+
+```{r,  out.width = "50%", echo = FALSE, fig.show='hold'}
+include_graphics("../images/joining_data.png")
+include_graphics("../images/Antijoin-in-R.png")
+```
+
+[source](https://www.geeksforgeeks.org/anti-join-in-r/)
+
+## `anti_join()`
+https://raw.githubusercontent.com/gadenbuie/tidyexplain/main/images/anti-join.gif
+
+```{r, fig.alt="A gif showing the full joining of two simple datasets.", out.width = "50%", echo = FALSE, align = "center"}
+knitr::include_graphics("media/Join_anti-join.gif")
+```
+
+## Other stuff: `anti_join` (`dplyr`)
+
 
 ```{r}
 anti_join(data_As, data_cold)
 ```
 
-https://raw.githubusercontent.com/gadenbuie/tidyexplain/main/images/anti-join.gif
 
-```{r, fig.alt="A gif showing the full joining of two simple datasets.", out.width = "30%", echo = FALSE, align = "center"}
-knitr::include_graphics("media/Join_anti-join.gif")
+## Other stuff: `anti_join` (`dplyr`)
+
+
+```{r}
+anti_join(data_cold, data_As)
 ```
+
+
+
+## Summary
+
+* Merging/joining data sets together - assumes all column names that overlap
+     - use the `by = c("a" = "b")` if they differ
+* `inner_join(x, y)` - only rows that match for `x` and `y` are kept
+* `full_join(x, y)` - all rows of `x` and `y` are kept 
+* `left_join(x, y)` - all rows of `x` are kept even if not merged with `y`
+* `right_join(x, y)` - all rows of `y` are kept even if not merged with `x`
+* Use the `tidylog` package for a detailed summary
+* `setdiff(x, y)` shows what in `x` is missing from `y`
+* `bind_rows(x, y)` appends datasets
+
+# Extra slides
 
 ## Other stuff: `cross_join` (`dplyr`)
 
@@ -268,20 +351,6 @@ nj
 ```{r}
 nj %>% pull(data_cold)
 ```
-
-## Summary
-
-* Merging/joining data sets together - assumes all column names that overlap
-     - use the `by = c("a" = "b")` if they differ
-* `inner_join(x, y)` - only rows that match for `x` and `y` are kept
-* `full_join(x, y)` - all rows of `x` and `y` are kept 
-* `left_join(x, y)` - all rows of `x` are kept even if not merged with `y`
-* `right_join(x, y)` - all rows of `y` are kept even if not merged with `x`
-* Use the `tidylog` package for a detailed summary
-* `setdiff(x, y)` shows what in `x` is missing from `y`
-* `bind_rows(x, y)` appends datasets
-
-# Extra slides
 
 ## "Includes duplicates" with both datasets duplicated: {.codesmall}
 
