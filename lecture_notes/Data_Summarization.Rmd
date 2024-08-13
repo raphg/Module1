@@ -43,16 +43,12 @@ These functions work on **vectors**:
 ```{r}
 x <- c(1, 5, 7, 4, 2, 8)
 mean(x)
-mean(x, na.rm = TRUE) # Remove NAs if needed
 ```
-
-## Statistical summarization
 
 Summarization on a `data.frame`/`tibble`:
 
 ```{r}
-mtcars %>% pull(hp) %>% mean() # alt: pull(mtcars, hp) %>% mean()
-mean(mtcars$hp)
+mtcars %>% pull(hp) %>% mean()
 ```
 
 ## Youth Tobacco Survey {.codesmall}
@@ -74,23 +70,7 @@ locations <- yts %>% pull(LocationDesc)
 locations
 ```
 
-## Length and unique
-
-`unique(x)` will return the unique elements of `x`
-
-```{r, message = FALSE}
-unique(locations)
-```
-
-## Length and unique
-
-`length` will tell you the length of a vector. Combined with `unique`, tells you the number of unique elements:
-
-```{r}
-length(unique(locations))
-```
-
-## Counting NAs
+## Check for NAs
 
 use `sum(is.na())`:
 
@@ -100,7 +80,7 @@ sum(is.na(locations))
 
 ## `dplyr`: `count` 
 
-Use `count` directly on a data.frame and column: count the number of rows in each group.
+Use `count` directly on a data.frame and column: count the number of rows in each group. The `nrow` of the dataset tells you the number of unique groups.
 
 ```{r, message = FALSE}
 yts %>% count(LocationDesc)
@@ -216,45 +196,37 @@ yts %>%
 
 Use the [`across`](https://dplyr.tidyverse.org/reference/across.html) function with `summarize()` to summarize across multiple columns of your data.
 
-```{r, eval = FALSE}
-# General format - Not the code!
-across({ columns to go across }, ~ { summarization_function(.x, na.rm = ..) }) 
-```
-
-## Iterative summaries: `dplyr` `summarize()` and `across()` functions
-
-Use the [`across`](https://dplyr.tidyverse.org/reference/across.html) function with `summarize()` to summarize across multiple columns of your data.
-
-```{r, eval = FALSE}
-# General format - Not the code!
-across({ columns to go across }, ~ { summarization_function(.x, na.rm = ..) }) 
-```
-</div>
-
 ```{r}
 yts %>%
   group_by(YEAR) %>%
-  summarize(across( c(Data_Value, Data_Value_Std_Err, Sample_Size), 
-                    ~ mean(.x, na.rm = TRUE)))
+  summarize(across( 
+    c(Data_Value, Data_Value_Std_Err, Sample_Size), 
+    ~ mean(.x, na.rm = TRUE)
+  ))
 ```
+
+## Select different columns based on the data class
+
+select helpers (`??tidyr_tidy_select`) are great. We could also use:
+
+- is.numeric
+- is.character
+- is.factor
+
+to look for data.
 
 ## Iterative summaries: `dplyr` `summarize()` and `across()` functions
 
-Another example using select helpers (`??tidyr_tidy_select`):
+Select only numeric columns.
+
+```{r}
+is.numeric(1)
+```
 
 ```{r}
 yts %>% 
   summarize(across( where(is.numeric), ~ mean(.x, na.rm = TRUE)))
 ```
-
-## Data Summarization on data frames
-
-* Basic statistical summarization for numeric data
-    * `rowMeans(x)`: takes the means of each row of x
-    * `colMeans(x)`: takes the means of each column of x
-    * `rowSums(x)`: takes the sum of each row of x
-    * `colSums(x)`: takes the sum of each column of x
-    * `summary(x)`: for data frames, displays the quantile information
 
 ## `summary()` Function
 
@@ -267,10 +239,10 @@ summary(yts)
 ## Summary
 
 - summary stats (`mean()`) work with `pull()`
-- `count(x)`: what unique values do you have? 
-  - `pull()` to get vectors
-  - `unique()` combined with `length()`
+- `count(x)`: what unique values do you have?
 - `group_by()`: changes all subsequent functions
   - combine with `summarize()` to get statistics per group
   - combine with `across()` to programmatically select columns
 - `summary(x)`: quantile information
+
+https://sisbid.github.io/Data-Wrangling/labs/data-summarization-lab.Rmd
