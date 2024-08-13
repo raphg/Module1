@@ -228,6 +228,21 @@ yts %>%
   summarize(across( where(is.numeric), ~ mean(.x, na.rm = TRUE)))
 ```
 
+## Changing the order of character data - factors
+
+```{r}
+yts %>% count(Education)
+```
+
+```{r}
+yts %>%
+  mutate(Education = factor(
+    Education, 
+    levels = c("Middle School", "High School")
+  )) %>% 
+  count(Education)
+```
+
 ## `summary()` Function
 
 Using `summary()` can give you rough snapshots of each numeric column (character columns are skipped):
