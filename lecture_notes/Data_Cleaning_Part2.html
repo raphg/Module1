@@ -3068,18 +3068,21 @@ var loadDeck = function(event) {
   });
 };
 
-if (document.readyState !== "loading" &&
-    document.querySelector('slides') === null) { 
-  // if the document is done loading but our element hasn't yet appeared, defer
-  // loading of the deck
-  window.setTimeout(function() {
-    loadDeck(null);
-  }, 0);
-} else {
-  // still loading the DOM, so wait until it's finished
-  document.addEventListener("DOMContentLoaded", loadDeck);
-}
+if (!window.Shiny) {
+  // If Shiny is loaded, the slide deck is initialized in ioslides template
 
+  if (document.readyState !== "loading" &&
+      document.querySelector('slides') === null) {
+    // if the document is done loading but our element hasn't yet appeared, defer
+    // loading of the deck
+    window.setTimeout(function() {
+      loadDeck(null);
+    }, 0);
+  } else {
+    // still loading the DOM, so wait until it's finished
+    document.addEventListener("DOMContentLoaded", loadDeck);
+  }
+}
 
 
 </script>
@@ -3122,7 +3125,7 @@ div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -3250,40 +3253,52 @@ font-size: 16px;
 
 </article></slide><slide class=""><hgroup><h2>Example of Cleaning: more complicated</h2></hgroup><article  id="example-of-cleaning-more-complicated">
 
-<p>For example, let’s say gender was coded as Male, M, m, Female, F, f. Using Excel to find all of these would be a matter of filtering and changing all by hand or using if statements.</p>
+<p>For example, let’s say we have a variable about treatment or control conditions coded as treatment, T, treat, Treat, C, Cont, cont, cOnt, Control, and control. Using Excel to find all of these would be a matter of filtering and changing all by hand or using if statements.</p>
 
 <p>Sometimes though, it’s not so simple. That’s where functions that find patterns come to be very useful.</p>
 
-<pre class = 'prettyprint lang-r'>table(gender)</pre>
+</article></slide><slide class=""><hgroup><h2>Take a look at the data</h2></hgroup><article  id="take-a-look-at-the-data">
 
-<pre >gender
-     F FeMAle FEMALE     Fm      M     Ma   mAle   Male   MaLe   MALE    Man 
-    80     88     76     87     99     76     84     83     79     93     84 
- Woman 
-    71 </pre>
+<pre class = 'prettyprint lang-r'>count(data_gen, status)</pre>
+
+<pre ># A tibble: 11 × 2
+   status        n
+   &lt;chr&gt;     &lt;int&gt;
+ 1 C            81
+ 2 Cont         90
+ 3 Control      91
+ 4 T            91
+ 5 Traet       105
+ 6 Treat       100
+ 7 cOnt         79
+ 8 cont         83
+ 9 control      98
+10 treat        86
+11 treatment    96</pre>
 
 </article></slide><slide class=""><hgroup><h2>Example of Cleaning: more complicated</h2></hgroup><article  id="example-of-cleaning-more-complicated-1">
 
 <p>In R, you could use <code>case_when()</code>:</p>
 
 <pre class = 'prettyprint lang-r'>#case_when way:
-data_gen &lt;-data_gen %&gt;% mutate(gender = 
-                      case_when(gender %in% c(&quot;Male&quot;, &quot;M&quot;, &quot;m&quot;, &quot;Man&quot;)
-                                ~ &quot;Male&quot;,
-                           TRUE ~ gender)) 
-head(data_gen)</pre>
+data_gen &lt;-data_gen %&gt;% mutate(status = 
+            case_when(status 
+                        %in% c(&quot;C&quot;, &quot;cont&quot;, &quot;cOnt&quot;, &quot;Cont&quot;, &quot;control&quot;, &quot;Control&quot;)
+                                ~ &quot;Control&quot;,
+                           TRUE ~ status)) 
+count(data_gen, status)</pre>
 
-<pre ># A tibble: 6 × 1
-  gender
-  &lt;chr&gt; 
-1 F     
-2 Fm    
-3 MaLe  
-4 MaLe  
-5 FeMAle
-6 FEMALE</pre>
+<pre ># A tibble: 6 × 2
+  status        n
+  &lt;chr&gt;     &lt;int&gt;
+1 Control     522
+2 T            91
+3 Traet       105
+4 Treat       100
+5 treat        86
+6 treatment    96</pre>
 
-<p>Oh dear! This only fixes some values! It is difficult to notice values like <code>&quot;MaLe&quot;</code>.</p>
+<p>Oh dear! This only fixes some values! It is difficult to notice values like <code>&quot;Traet&quot;</code>.</p>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>String functions</h2></hgroup><article  id="string-functions">
 
@@ -3323,22 +3338,34 @@ head(data_gen)</pre>
 
 <pre class = 'prettyprint lang-r'>#case_when way:
 data_gen &lt;-data_gen %&gt;%
-                mutate(gender = str_to_sentence(gender)) %&gt;%
-                mutate(gender = 
-                      case_when(gender %in% c(&quot;Male&quot;, &quot;M&quot;, &quot;m&quot;, &quot;Man&quot;)
-                                ~ &quot;Male&quot;,
-                           TRUE ~ gender)) 
-head(data_gen)</pre>
+                mutate(status = str_to_sentence(status))
+count(data_gen, status)</pre>
 
-<pre ># A tibble: 6 × 1
-  gender
-  &lt;chr&gt; 
-1 F     
-2 Fm    
-3 Male  
-4 Male  
-5 Female
-6 Female</pre>
+<pre ># A tibble: 5 × 2
+  status        n
+  &lt;chr&gt;     &lt;int&gt;
+1 Control     522
+2 T            91
+3 Traet       105
+4 Treat       186
+5 Treatment    96</pre>
+
+</article></slide><slide class=""><hgroup><h2>recoding with <code>str_to_sentence()</code></h2></hgroup><article  id="recoding-with-str_to_sentence-1">
+
+<pre class = 'prettyprint lang-r'>#case_when way:
+data_gen &lt;-data_gen %&gt;%
+                mutate(status = str_to_sentence(status)) %&gt;%
+                mutate(status = 
+                      case_when(status %in% c(&quot;Treatment&quot;, &quot;T&quot;, &quot;Treat&quot;, &quot;Traet&quot;, &quot;Treat&quot;)
+                                ~ &quot;Treatment&quot;,
+                           TRUE ~ status)) 
+count(data_gen, status)</pre>
+
+<pre ># A tibble: 2 × 2
+  status        n
+  &lt;chr&gt;     &lt;int&gt;
+1 Control     522
+2 Treatment   478</pre>
 
 <p>OK, now we are getting somewhere!</p>
 
@@ -3383,13 +3410,13 @@ colnames(ufo_clean)</pre>
     pattern = &quot;`&quot;))</pre>
 
 <pre ># A tibble: 3 × 11
-  datetime     city  state country shape durat…¹ durat…² comme…³ date_…⁴ latit…⁵
-  &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
-1 2/2/2000 19… bouse az    us      &lt;NA&gt;  2`      each a… Drivin… 2/16/2… 33.932…
-2 4/10/2005 2… sant… ca    us      &lt;NA&gt;  8`      eight … 2 red … 4/16/2… 36.974…
-3 7/21/2006 1… ibag… &lt;NA&gt;  &lt;NA&gt;    circ… 0.5`    1/2 se… Viajab… 10/30/… 4.4406…
-# … with 1 more variable: longitude &lt;chr&gt;, and abbreviated variable names
-#   ¹​duration_seconds, ²​duration_hours_min, ³​comments, ⁴​date_posted, ⁵​latitude</pre>
+  datetime        city   state country shape duration_seconds duration_hours_min
+  &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;             
+1 2/2/2000 19:33  bouse  az    us      &lt;NA&gt;  2`               each a few seconds
+2 4/10/2005 22:52 santa… ca    us      &lt;NA&gt;  8`               eight seconds     
+3 7/21/2006 13:00 ibagu… &lt;NA&gt;  &lt;NA&gt;    circ… 0.5`             1/2 segundo       
+# ℹ 4 more variables: comments &lt;chr&gt;, date_posted &lt;chr&gt;, latitude &lt;chr&gt;,
+#   longitude &lt;chr&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>str_remove</h2></hgroup><article  id="str_remove">
 
@@ -3419,26 +3446,19 @@ $ date_posted        &lt;chr&gt; &quot;4/27/2004&quot;, &quot;12/16/2005&quot;, 
 $ latitude           &lt;chr&gt; &quot;29.8830556&quot;, &quot;29.38421&quot;, &quot;53.2&quot;, &quot;28.9783333&quot;, &quot;21…
 $ longitude          &lt;chr&gt; &quot;-97.9411111&quot;, &quot;-98.581082&quot;, &quot;-2.916667&quot;, &quot;-96.6458…</pre>
 
-</article></slide><slide class=""><hgroup><h2>Paste can add things back to variables</h2></hgroup><article  id="paste-can-add-things-back-to-variables">
+<!-- ## Paste can add things back to variables -->
 
-<pre class = 'prettyprint lang-r'>ufo_clean %&gt;% 
-  mutate(duration_seconds = 
-           paste(duration_seconds, &quot;sec&quot;, sep = &quot; &quot;)) %&gt;% 
-  glimpse()</pre>
+<!-- ```{r} -->
 
-<pre >Rows: 88,679
-Columns: 11
-$ datetime           &lt;chr&gt; &quot;10/10/1949 20:30&quot;, &quot;10/10/1949 21:00&quot;, &quot;10/10/1955…
-$ city               &lt;chr&gt; &quot;san marcos&quot;, &quot;lackland afb&quot;, &quot;chester (uk/england)…
-$ state              &lt;chr&gt; &quot;tx&quot;, &quot;tx&quot;, NA, &quot;tx&quot;, &quot;hi&quot;, &quot;tn&quot;, NA, &quot;ct&quot;, &quot;al&quot;, &quot;…
-$ country            &lt;chr&gt; &quot;us&quot;, NA, &quot;gb&quot;, &quot;us&quot;, &quot;us&quot;, &quot;us&quot;, &quot;gb&quot;, &quot;us&quot;, &quot;us&quot;,…
-$ shape              &lt;chr&gt; &quot;cylinder&quot;, &quot;light&quot;, &quot;circle&quot;, &quot;circle&quot;, &quot;light&quot;, &quot;…
-$ duration_seconds   &lt;chr&gt; &quot;2700 sec&quot;, &quot;7200 sec&quot;, &quot;20 sec&quot;, &quot;20 sec&quot;, &quot;900 se…
-$ duration_hours_min &lt;chr&gt; &quot;45 minutes&quot;, &quot;1-2 hrs&quot;, &quot;20 seconds&quot;, &quot;1/2 hour&quot;, …
-$ comments           &lt;chr&gt; &quot;This event took place in early fall around 1949-50…
-$ date_posted        &lt;chr&gt; &quot;4/27/2004&quot;, &quot;12/16/2005&quot;, &quot;1/21/2008&quot;, &quot;1/17/2004&quot;…
-$ latitude           &lt;chr&gt; &quot;29.8830556&quot;, &quot;29.38421&quot;, &quot;53.2&quot;, &quot;28.9783333&quot;, &quot;21…
-$ longitude          &lt;chr&gt; &quot;-97.9411111&quot;, &quot;-98.581082&quot;, &quot;-2.916667&quot;, &quot;-96.6458…</pre>
+<!-- ufo_clean %>%  -->
+
+<!--   mutate(duration_seconds =  -->
+
+<!--            paste(duration_seconds, "sec", sep = " ")) %>%  -->
+
+<!--   glimpse() -->
+
+<!-- ``` -->
 
 </article></slide><slide class=""><hgroup><h2>Substringing</h2></hgroup><article  id="substringing">
 
@@ -3483,7 +3503,7 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
 <li>They can use to match a large number of strings in one statement</li>
 <li><code>.</code> matches any single character</li>
 <li><code>*</code> means repeat as many (even if 0) more times the last character</li>
-<li><code>?</code> makes the last thing optional</li>
+<li><code>?</code> makes a pattern optional (i.e. it matches 0 or 1 times)</li>
 <li><code>^</code> matches start of vector <code>^a</code> - starts with &ldquo;a&rdquo;</li>
 <li><code>$</code> matches end of vector <code>b$</code> - ends with &ldquo;b&rdquo;</li>
 </ul>
@@ -3494,8 +3514,8 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
 
 <ul>
 <li><code>str_detect</code> - returns <code>TRUE</code> if <code>pattern</code> is found</li>
-<li><code>str_subset</code> - returns only the strings which pattern were detected</li>
-<li><code>str_extract</code> - returns only the pattern which were detected</li>
+<li><code>str_subset</code> - returns only the strings where the pattern were detected</li>
+<li><code>str_extract</code> - returns only the pattern that was detected</li>
 <li><code>str_replace</code> - replaces <code>pattern</code> with <code>replacement</code> the first time</li>
 <li><code>str_replace_all</code> - replaces <code>pattern</code> with <code>replacement</code> as many times matched</li>
 </ul>
@@ -3519,12 +3539,12 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
   head()</pre>
 
 <pre ># A tibble: 2 × 11
-  datetime     city  state country shape durat…¹ durat…² comme…³ date_…⁴ latit…⁵
-  &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
-1 10/14/2006 … yuma  va    us      form…     300 5 minu… ((HOAX… 4/27/2… 36.615…
-2 7/1/2007 23… nort… ct    &lt;NA&gt;    unkn…      60 1 minu… Witnes… 10/19/… 41.985…
-# … with 1 more variable: longitude &lt;chr&gt;, and abbreviated variable names
-#   ¹​duration_seconds, ²​duration_hours_min, ³​comments, ⁴​date_posted, ⁵​latitude</pre>
+  datetime         city  state country shape duration_seconds duration_hours_min
+  &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;             
+1 10/14/2006 02:00 yuma  va    us      form…              300 5 minutes         
+2 7/1/2007 23:00   nort… ct    &lt;NA&gt;    unkn…               60 1 minute          
+# ℹ 4 more variables: comments &lt;chr&gt;, date_posted &lt;chr&gt;, latitude &lt;chr&gt;,
+#   longitude &lt;chr&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>To Take a look at comments… need to select it first</h2></hgroup><article  id="to-take-a-look-at-comments-need-to-select-it-first">
 
@@ -3553,14 +3573,14 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
 <p><code>str_extract</code> extracts just the matched string</p>
 
 <pre class = 'prettyprint lang-r'>ufo_clean %&gt;% 
-  mutate(aliens  = str_extract(comments, &quot;aliens&quot;)) %&gt;%
+  mutate(aliens  = str_extract(comments, &quot;two aliens&quot;)) %&gt;%
   count(aliens)</pre>
 
 <pre ># A tibble: 2 × 2
-  aliens     n
-  &lt;chr&gt;  &lt;int&gt;
-1 aliens    53
-2 &lt;NA&gt;   88626</pre>
+  aliens         n
+  &lt;chr&gt;      &lt;int&gt;
+1 two aliens     2
+2 &lt;NA&gt;       88677</pre>
 
 <ul>
 <li>Look for any comment that starts with &ldquo;aliens&rdquo;</li>
@@ -3583,16 +3603,26 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
 [4] &quot;On Monday october 3&amp;#44 2005&amp;#44 I spotted two spaceships in the sky.  The first spotted ship was what seemed to be a bright star&amp;#44 when it st&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>ufo_clean %&gt;% pull(comments) %&gt;% 
-  str_subset(&quot;space.ship&quot;) %&gt;% head(4) # no &quot;spaceship&quot; must have character in bw</pre>
+  str_subset(&quot;space.ship&quot;) %&gt;% head(4) # no &quot;spaceship&quot; must have character in between</pre>
 
 <pre >[1] &quot;A space ship was descending to the ground&quot;                                                                                                 
 [2] &quot;I saw a Silver space ship rising into the early morning sky over Houston&amp;#44 Texas.&quot;                                                       
 [3] &quot;Saw a space ship hanging over the southern (Manzano) portion of the Sandia Mountains on evening. It was brightly lit&amp;#44 but not entirely.&quot;
 [4] &quot;saw space ship for 5 min&amp;#33 Got scared crapless&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33&amp;#33 happened in arizona&quot;      </pre>
 
+</article></slide><slide class=""><hgroup><h2>time information</h2></hgroup><article  id="time-information">
+
+<pre class = 'prettyprint lang-r'>pull(ufo_clean, duration_hours_min) %&gt;% head(n = 20)</pre>
+
+<pre > [1] &quot;45 minutes&quot;      &quot;1-2 hrs&quot;         &quot;20 seconds&quot;      &quot;1/2 hour&quot;       
+ [5] &quot;15 minutes&quot;      &quot;5 minutes&quot;       &quot;about 3 mins&quot;    &quot;20 minutes&quot;     
+ [9] &quot;3  minutes&quot;      &quot;several minutes&quot; &quot;5 min.&quot;          &quot;3 minutes&quot;      
+[13] &quot;30 min.&quot;         &quot;3 minutes&quot;       &quot;30 seconds&quot;      &quot;20minutes&quot;      
+[17] &quot;2 minutes&quot;       &quot;20-30 min&quot;       &quot;20 sec.&quot;         &quot;2 min&quot;          </pre>
+
 </article></slide><slide class=""><hgroup><h2>str_replace()</h2></hgroup><article  id="str_replace">
 
-<p>Let’s say we wanted to make the time information more consistent. Using <code>case_when()</code> would be very tedious and error-prone!</p>
+<p>Let’s say we wanted to make the time information more consistent. Using <code>case_when()</code> could be very tedious and error-prone!</p>
 
 <p>We can use <code>str_replace()</code> to do so.</p>
 
@@ -3627,20 +3657,22 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
 
 <p>As you can see there is still plenty of cleaning to do!</p>
 
-<pre class = 'prettyprint lang-r'>ufo_clean %&gt;% separate(date_posted,
-                 into = c(&quot;date_posted&quot;, &quot;time_posted&quot;),
-                 sep = &quot; &quot;) %&gt;%
-  select(date_posted, time_posted) %&gt;% head()</pre>
+</article></slide><slide class=""><hgroup><h2>more seperating</h2></hgroup><article  id="more-seperating">
+
+<pre class = 'prettyprint lang-r'>ufo_clean &lt;- ufo_clean %&gt;% separate(datetime,
+                 into = c(&quot;date&quot;, &quot;time&quot;),
+                 sep = &quot; &quot;)
+ufo_clean %&gt;% select(date, time) %&gt;% head()</pre>
 
 <pre ># A tibble: 6 × 2
-  date_posted time_posted
-  &lt;chr&gt;       &lt;chr&gt;      
-1 4/27/2004   &lt;NA&gt;       
-2 12/16/2005  &lt;NA&gt;       
-3 1/21/2008   &lt;NA&gt;       
-4 1/17/2004   &lt;NA&gt;       
-5 1/22/2004   &lt;NA&gt;       
-6 4/27/2007   &lt;NA&gt;       </pre>
+  date       time 
+  &lt;chr&gt;      &lt;chr&gt;
+1 10/10/1949 20:30
+2 10/10/1949 21:00
+3 10/10/1955 17:00
+4 10/10/1956 21:00
+5 10/10/1960 20:00
+6 10/10/1961 19:00</pre>
 
 </article></slide><slide class=""><hgroup><h2>Dates and times</h2></hgroup><article  id="dates-and-times" class="smaller">
 
@@ -3648,23 +3680,20 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
 
 <pre class = 'prettyprint lang-r'>library(lubridate)#need to load this one!
 
-ufo_clean &lt;- ufo_clean %&gt;% mutate(date_posted = mdy(date_posted))</pre>
+ufo_clean &lt;- ufo_clean %&gt;% mutate(date = mdy(date))
+head(ufo_clean)</pre>
 
-<pre >Warning: 193 failed to parse.</pre>
-
-<pre class = 'prettyprint lang-r'>head(ufo_clean)</pre>
-
-<pre ># A tibble: 6 × 11
-  datetime  city  state country shape durat…¹ durat…² comme…³ date_pos…⁴ latit…⁵
-  &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  
-1 10/10/19… san … tx    us      cyli…    2700 45 min… This e… 2004-04-27 29.883…
-2 10/10/19… lack… tx    &lt;NA&gt;    light    7200 1-2 hrs 1949 L… 2005-12-16 29.384…
-3 10/10/19… ches… &lt;NA&gt;  gb      circ…      20 20 sec… Green/… 2008-01-21 53.2   
-4 10/10/19… edna  tx    us      circ…      20 1/2 ho… My old… 2004-01-17 28.978…
-5 10/10/19… kane… hi    us      light     900 15 min… AS a M… 2004-01-22 21.418…
-6 10/10/19… bris… tn    us      sphe…     300 5 minu… My fat… 2007-04-27 36.595…
-# … with 1 more variable: longitude &lt;chr&gt;, and abbreviated variable names
-#   ¹​duration_seconds, ²​duration_hours_min, ³​comments, ⁴​date_posted, ⁵​latitude</pre>
+<pre ># A tibble: 6 × 12
+  date       time  city  state country shape duration_seconds duration_hours_min
+  &lt;date&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;             
+1 1949-10-10 20:30 san … tx    us      cyli…             2700 45 minutes        
+2 1949-10-10 21:00 lack… tx    &lt;NA&gt;    light             7200 1-2 hrs           
+3 1955-10-10 17:00 ches… &lt;NA&gt;  gb      circ…               20 20 seconds        
+4 1956-10-10 21:00 edna  tx    us      circ…               20 1/2 hour          
+5 1960-10-10 20:00 kane… hi    us      light              900 15 minutes        
+6 1961-10-10 19:00 bris… tn    us      sphe…              300 5 minutes         
+# ℹ 4 more variables: comments &lt;chr&gt;, date_posted &lt;chr&gt;, latitude &lt;chr&gt;,
+#   longitude &lt;chr&gt;</pre>
 
 <!-- ## Special characters -->
 
@@ -3713,6 +3742,8 @@ ufo_clean &lt;- ufo_clean %&gt;% mutate(date_posted = mdy(date_posted))</pre>
 <!-- parse_number(c("12,123,123.00", "12,465.10")) -->
 
 <!-- ``` -->
+
+</article></slide><slide class=""><hgroup><h2>str_*functions</h2></hgroup><article  id="str_functions">
 
 <pre class = 'prettyprint lang-r'>str_detect(string = c(&quot;abcdd&quot;, &quot;two&quot;), pattern = &quot;dd&quot;)</pre>
 
@@ -3774,6 +3805,11 @@ ufo_clean &lt;- ufo_clean %&gt;% mutate(date_posted = mdy(date_posted))</pre>
        window.jQuery(document).on('slideenter', function(e) {
          window.jQuery(e.target).trigger('shown');
       });
+    }
+    if (window.Shiny) {
+      // Initialize slides when this script appears on the page, since it
+      // indicates that the <slides> markup has been fully loaded.
+      window.loadDeck();
     }
   })();
 </script>
