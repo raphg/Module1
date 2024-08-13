@@ -3283,7 +3283,7 @@ font-size: 16px;
 <pre class = 'prettyprint lang-r'>#case_when way:
 data_gen &lt;-data_gen %&gt;% mutate(status = 
             case_when(status 
-                        %in% c(&quot;C&quot;, &quot;cont&quot;, &quot;cOnt&quot;, &quot;Cont&quot;, &quot;control&quot;, &quot;Control&quot;)
+          %in% c(&quot;C&quot;, &quot;cont&quot;, &quot;cOnt&quot;, &quot;Cont&quot;, &quot;control&quot;, &quot;Control&quot;)
                                 ~ &quot;Control&quot;,
                            TRUE ~ status)) 
 count(data_gen, status)</pre>
@@ -3356,7 +3356,8 @@ count(data_gen, status)</pre>
 data_gen &lt;-data_gen %&gt;%
                 mutate(status = str_to_sentence(status)) %&gt;%
                 mutate(status = 
-                      case_when(status %in% c(&quot;Treatment&quot;, &quot;T&quot;, &quot;Treat&quot;, &quot;Traet&quot;, &quot;Treat&quot;)
+                      case_when(status %in% 
+                    c(&quot;Treatment&quot;, &quot;T&quot;, &quot;Treat&quot;, &quot;Traet&quot;, &quot;Treat&quot;)
                                 ~ &quot;Treatment&quot;,
                            TRUE ~ status)) 
 count(data_gen, status)</pre>
@@ -3373,26 +3374,25 @@ count(data_gen, status)</pre>
 
 <p>Now we have a chance to keep but clean these values!</p>
 
-<pre class = 'prettyprint lang-r'>ufo &lt;-read_csv(&quot;https://sisbid.github.io/Data-Wrangling/data/ufo/ufo_data_complete.csv&quot;, col_types = cols(`duration (seconds)` = &quot;c&quot;))</pre>
+<pre class = 'prettyprint lang-r'>ufo &lt;-read_csv(
+  &quot;https://sisbid.github.io/Data-Wrangling/data/ufo/ufo_data_complete.csv&quot;, 
+  col_types = cols(`duration (seconds)` = &quot;c&quot;))</pre>
 
 <pre >Warning: One or more parsing issues, call `problems()` on your data frame for details,
 e.g.:
   dat &lt;- vroom(...)
   problems(dat)</pre>
 
-<pre class = 'prettyprint lang-r'>p &lt;- problems(ufo)
-ufo_clean &lt;- ufo %&gt;% slice((pull(p, row))*-1)</pre>
-
 </article></slide><slide class=""><hgroup><h2>Clean names with the <code>clean_names()</code> function from the <code>janitor</code> package</h2></hgroup><article  id="clean-names-with-the-clean_names-function-from-the-janitor-package">
 
-<pre class = 'prettyprint lang-r'>colnames(ufo_clean)</pre>
+<pre class = 'prettyprint lang-r'>colnames(ufo)</pre>
 
 <pre > [1] &quot;datetime&quot;             &quot;city&quot;                 &quot;state&quot;               
  [4] &quot;country&quot;              &quot;shape&quot;                &quot;duration (seconds)&quot;  
  [7] &quot;duration (hours/min)&quot; &quot;comments&quot;             &quot;date posted&quot;         
 [10] &quot;latitude&quot;             &quot;longitude&quot;           </pre>
 
-<pre class = 'prettyprint lang-r'>ufo_clean &lt;- clean_names(ufo_clean)
+<pre class = 'prettyprint lang-r'>ufo_clean &lt;- clean_names(ufo)
 colnames(ufo_clean)</pre>
 
 <pre > [1] &quot;datetime&quot;           &quot;city&quot;               &quot;state&quot;             
@@ -3432,7 +3432,7 @@ colnames(ufo_clean)</pre>
 
 glimpse(ufo_clean)</pre>
 
-<pre >Rows: 88,679
+<pre >Rows: 88,875
 Columns: 11
 $ datetime           &lt;chr&gt; &quot;10/10/1949 20:30&quot;, &quot;10/10/1949 21:00&quot;, &quot;10/10/1955…
 $ city               &lt;chr&gt; &quot;san marcos&quot;, &quot;lackland afb&quot;, &quot;chester (uk/england)…
@@ -3580,7 +3580,7 @@ str_sub(c(&quot;Site A&quot;, &quot;Site B&quot;, &quot;Site C&quot;), 6,6)</pre
   aliens         n
   &lt;chr&gt;      &lt;int&gt;
 1 two aliens     2
-2 &lt;NA&gt;       88677</pre>
+2 &lt;NA&gt;       88873</pre>
 
 <ul>
 <li>Look for any comment that starts with &ldquo;aliens&rdquo;</li>
