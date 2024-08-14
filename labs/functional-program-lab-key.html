@@ -11,7 +11,7 @@
 
 
 
-<title>Functional Programming</title>
+<title>Functional Programming Key</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,7 +348,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Functional Programming</h1>
+<h1 class="title toc-ignore">Functional Programming Key</h1>
 
 </div>
 
@@ -403,44 +403,17 @@ of digits for rounding to be 1.</li>
 ## 5          5.0         3.6          1.4         0.2  setosa
 ## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li>Create a function for adding 2 to a value and dividing by 6. Call
-the function <code>new_function</code> and use x as the input. Apply
-this function to the numeric columns of the <code>iris_lab</code> data.
-Hint: start with <code>function(x){}</code>. Fill in the curly
-brackets.</li>
-</ol>
-<pre class="r"><code>new_function &lt;- function(x){(x+2)/6}
-iris_lab %&gt;% 
-  mutate(across(.cols = !Species, ~ new_function(.x))) %&gt;%
-  head()</code></pre>
-<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-## 1     1.183333   0.9166667    0.5666667   0.3666667  setosa
-## 2     1.150000   0.8333333    0.5666667   0.3666667  setosa
-## 3     1.116667   0.8666667    0.5500000   0.3666667  setosa
-## 4     1.100000   0.8500000    0.5833333   0.3666667  setosa
-## 5     1.166667   0.9333333    0.5666667   0.3666667  setosa
-## 6     1.233333   0.9833333    0.6166667   0.4000000  setosa</code></pre>
-<ol start="4" style="list-style-type: decimal">
-<li>Now create a function that includes x and y inputs. Call the
-function <code>div_function</code> and use it to divide x by y and then
-add 3 to the outcome. Hint: start with <code>function(x, y){}</code>.
-Fill in the curly brackets.</li>
-</ol>
-<pre class="r"><code>div_function &lt;- function(x, y){(x/y)+ 3}</code></pre>
-<ol start="5" style="list-style-type: decimal">
 <li>Use <code>if_all()</code> to check if there are iris flowers with
-sepal and petal widths and lengths (all the <code>iris_lab</code>
-numeric variables) greater than 2 centimeters but less than 6
-centimeters (which is the unit, if you type in ?iris you can learn more
-about the data). Hint - use <code>filter</code>. If any are, how
-many?</li>
+all measurements greater than 2 centimeters but less than 6 centimeters
+(which is the unit, if you type in ?iris you can learn more about the
+data). Hint - use <code>filter</code>. If any are, how many?</li>
 </ol>
 <pre class="r"><code>iris_lab %&gt;%
 filter(if_all(starts_with(c(&quot;Petal&quot;, &quot;Sepal&quot;)), ~.x &gt; 2 &amp; .x &lt; 6))  %&gt;%
   head()</code></pre>
 <pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
 ## 1          5.8         2.8          5.1         2.4 virginica</code></pre>
-<ol start="6" style="list-style-type: decimal">
+<ol start="4" style="list-style-type: decimal">
 <li>the function <code>format()</code> with the argument
 <code>scientific = TRUE</code> can be used to format numbers in
 scientific notation. For example:</li>

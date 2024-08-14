@@ -3068,18 +3068,21 @@ var loadDeck = function(event) {
   });
 };
 
-if (document.readyState !== "loading" &&
-    document.querySelector('slides') === null) { 
-  // if the document is done loading but our element hasn't yet appeared, defer
-  // loading of the deck
-  window.setTimeout(function() {
-    loadDeck(null);
-  }, 0);
-} else {
-  // still loading the DOM, so wait until it's finished
-  document.addEventListener("DOMContentLoaded", loadDeck);
-}
+if (!window.Shiny) {
+  // If Shiny is loaded, the slide deck is initialized in ioslides template
 
+  if (document.readyState !== "loading" &&
+      document.querySelector('slides') === null) {
+    // if the document is done loading but our element hasn't yet appeared, defer
+    // loading of the deck
+    window.setTimeout(function() {
+      loadDeck(null);
+    }, 0);
+  } else {
+    // still loading the DOM, so wait until it's finished
+    document.addEventListener("DOMContentLoaded", loadDeck);
+  }
+}
 
 
 </script>
@@ -3122,7 +3125,7 @@ div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -3278,11 +3281,10 @@ font-size: 16px;
 
 </article></slide><slide class=""><hgroup><h2>functions in R</h2></hgroup><article  id="functions-in-r">
 
-<pre class = 'prettyprint lang-r'>my_function &lt;- function(x){x + 1}
+<pre class = 'prettyprint lang-r'>my_function &lt;- function(x){x + 1} # alt: \(x){x + 1}
 my_function</pre>
 
-<pre >## function(x){x + 1}
-## &lt;environment: 0x286fcd630&gt;</pre>
+<pre >## function(x){x + 1}</pre>
 
 <pre class = 'prettyprint lang-r'>my_data  &lt;- c(2,3,4)
 
@@ -3459,14 +3461,9 @@ my_function(x = my_data)</pre>
 ## 2          7.2         3.6          6.1         2.5 virginica
 ## 3          6.7         3.3          5.7         2.5 virginica</pre>
 
-<pre class = 'prettyprint lang-r'>iris %&gt;% filter(if_all(where(is.numeric), ~ . &gt; 2.4))</pre>
-
-<pre >##   Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
-## 1          6.3         3.3          6.0         2.5 virginica
-## 2          7.2         3.6          6.1         2.5 virginica
-## 3          6.7         3.3          5.7         2.5 virginica</pre>
-
 <!-- iris %>% select(-Species) %>% filter(if_all(everything(), ~ . > 2.4)) -->
+
+<!-- iris %>% filter(if_all(where(is.numeric), ~ . > 2.4)) -->
 
 </article></slide><slide class=""><hgroup><h2><code>purrr</code> is also a super helpful package!</h2></hgroup><article  id="purrr-is-also-a-super-helpful-package">
 
@@ -3503,9 +3500,7 @@ map(vect, round) %&gt;% unlist()</pre>
 
 </article></slide><slide class=""><hgroup><h2>Using <code>map_df()</code></h2></hgroup><article  id="using-map_df">
 
-<pre class = 'prettyprint lang-r'>my_tibble &lt;- tibble(
-  values = c(1.2, 2.3, 3.5, 4.6)
-)
+<pre class = 'prettyprint lang-r'>my_tibble &lt;- tibble(values = c(1.2, 2.3, 3.5, 4.6))
 map_df(my_tibble, round)</pre>
 
 <pre >## # A tibble: 4 × 1
@@ -3584,11 +3579,9 @@ map_df(my_tibble, round)</pre>
 
 <!-- ``` -->
 
-</article></slide><slide class=""><hgroup><h2><code>purrr</code> - apply function to all columns</h2></hgroup><article  id="purrr---apply-function-to-all-columns">
+</article></slide><slide class=""><hgroup><h2><code>purrr</code> : <code>map_df</code> or <code>modify</code></h2></hgroup><article  id="purrr-map_df-or-modify">
 
-<p>two options <code>map_df</code> or <code>modify</code></p>
-
-<p>Lots of variations of <code>map</code> based on output</p>
+<p><code>map_df</code></p>
 
 <pre class = 'prettyprint lang-r'>library(purrr)
 head(mtcars, 2)</pre>
@@ -3598,7 +3591,7 @@ head(mtcars, 2)</pre>
 ## Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4</pre>
 
 <pre class = 'prettyprint lang-r'> mtcars %&gt;% 
-   map_df(round) %&gt;% # will be a tibble now - will remove rownames
+   map_df(round) %&gt;%
    head(2)</pre>
 
 <pre >## # A tibble: 2 × 11
@@ -3607,8 +3600,12 @@ head(mtcars, 2)</pre>
 ## 1    21     6   160   110     4     3    16     0     1     4     4
 ## 2    21     6   160   110     4     3    17     0     1     4     4</pre>
 
+</article></slide><slide class=""><hgroup><h2><code>purrr</code> : <code>map_df</code> or <code>modify</code></h2></hgroup><article  id="purrr-map_df-or-modify-1">
+
+<p><code>modify</code></p>
+
 <pre class = 'prettyprint lang-r'> mtcars %&gt;% 
-   modify(round) %&gt;% # modify keeps original data type
+   modify(round) %&gt;%
    head(2)</pre>
 
 <pre >##   mpg cyl disp  hp drat wt qsec vs am gear carb
@@ -3616,6 +3613,8 @@ head(mtcars, 2)</pre>
 ## 2  21   6  160 110    4  3   17  0  1    4    4</pre>
 
 </article></slide><slide class=""><hgroup><h2>It’s a bit simpler than across…</h2></hgroup><article  id="its-a-bit-simpler-than-across">
+
+<p>But <code>across</code> keeps rownames..</p>
 
 <pre class = 'prettyprint lang-r'>mtcars %&gt;% 
   modify(format, digits = 1) %&gt;%
@@ -3626,16 +3625,16 @@ head(mtcars, 2)</pre>
 ## 2  21   6  160 110    4  3   17  0  1    4    4</pre>
 
 <pre class = 'prettyprint lang-r'>mtcars %&gt;% 
-  mutate(across(.cols = everything(), format, digits = 1)) %&gt;%
+  mutate(across(.cols = everything(), ~ format(.x, digits = 1))) %&gt;%
   head(n = 2)</pre>
 
 <pre >##               mpg cyl disp  hp drat wt qsec vs am gear carb
 ## Mazda RX4      21   6  160 110    4  3   16  0  1    4    4
 ## Mazda RX4 Wag  21   6  160 110    4  3   17  0  1    4    4</pre>
 
-</article></slide><slide class=""><hgroup><h2><code>purrr</code> apply function to some columns like accross</h2></hgroup><article  id="purrr-apply-function-to-some-columns-like-accross">
+</article></slide><slide class=""><hgroup><h2><code>purrr</code> apply function to some columns like across</h2></hgroup><article  id="purrr-apply-function-to-some-columns-like-across" class="codesmall">
 
-<p>Using <code>modify_if()</code> or <code>map_if()</code>, we can specify what columns to modify</p>
+<p>Using <code>modify_if()</code> (or <code>map_if()</code>), we can specify what columns to modify</p>
 
 <pre class = 'prettyprint lang-r'>head(as_tibble(iris), 3)</pre>
 
@@ -3657,19 +3656,13 @@ head(mtcars, 2)</pre>
 ## 2 4.9          3           1.4          0.2         setosa 
 ## 3 4.7          3.2         1.3          0.2         setosa</pre>
 
-<pre class = 'prettyprint lang-r'>as_tibble(iris) %&gt;% 
-  map_if(is.numeric, as.character) %&gt;%
-  class()</pre>
-
-<pre >## [1] &quot;list&quot;</pre>
-
-</article></slide><slide class=""><hgroup><h2>modify_if vs mutate/across/where</h2></hgroup><article  id="modify_if-vs-mutateacrosswhere">
+</article></slide><slide class=""><hgroup><h2>Speed test! modify_if vs mutate/across/where</h2></hgroup><article  id="speed-test-modify_if-vs-mutateacrosswhere">
 
 <pre class = 'prettyprint lang-r'>system.time(iris %&gt;%
               modify_if(is.factor, as.character))</pre>
 
 <pre >##    user  system elapsed 
-##   0.000   0.000   0.001</pre>
+##       0       0       0</pre>
 
 <pre class = 'prettyprint lang-r'>system.time(iris %&gt;%
                mutate(across(.cols = where(is.factor), as.character)))</pre>
@@ -3747,7 +3740,7 @@ head(mtcars, 2)</pre>
 
 <!-- ## Examples we will use -->
 
-<p><!-- * https://jennybc.github.io/purrr-tutorial/ --> –&gt;</p>
+<p><!-- * https://jennybc.github.io/purrr-tutorial/ --></p>
 
 <!-- * https://cran.r-project.org/web/packages/repurrrsive/index.html -->
 
@@ -3795,7 +3788,7 @@ head(mtcars, 2)</pre>
 
 </article></slide><slide class=""><hgroup><h2>… Why lists?</h2></hgroup><article  id="why-lists">
 
-</article></slide><slide class=""><hgroup><h2>great example with <code>split()</code></h2></hgroup><article  id="great-example-with-split">
+</article></slide><slide class=""><hgroup><h2>List: <code>split()</code> the dataset by <code>cyl</code></h2></hgroup><article  id="list-split-the-dataset-by-cyl">
 
 <pre class = 'prettyprint lang-r'>head(mtcars)</pre>
 
@@ -3847,7 +3840,7 @@ head(mtcars, 2)</pre>
 ##   ..$ gear: num [1:14] 3 3 3 3 3 3 3 3 3 3 ...
 ##   ..$ carb: num [1:14] 2 4 3 3 3 4 4 4 2 2 ...</pre>
 
-</article></slide><slide class=""><hgroup><h2>great example with split()</h2></hgroup><article  id="great-example-with-split-1">
+</article></slide><slide class=""><hgroup><h2>List: model on each</h2></hgroup><article  id="list-model-on-each">
 
 <pre class = 'prettyprint lang-r'>mtcars %&gt;%
   split(.$cyl) %&gt;% # creates split of data for each unique cyl value
@@ -3858,7 +3851,7 @@ head(mtcars, 2)</pre>
 <pre >##         4         6         8 
 ## 0.5086326 0.4645102 0.4229655</pre>
 
-</article></slide><slide class=""><hgroup><h2>Lists from multiple files!</h2></hgroup><article  id="lists-from-multiple-files" class="smaller">
+</article></slide><slide class=""><hgroup><h2>Use lists to iterate through multiple files!</h2></hgroup><article  id="use-lists-to-iterate-through-multiple-files" class="smaller">
 
 <p>This comes up a lot in data cleaning and also when reading in multiple files!</p>
 
@@ -3877,11 +3870,7 @@ file_list</pre>
 ## [3] &quot;/Users/avahoffman/Dropbox/JHSPH/Data-Wrangling_SISBID/data/iris/iris_q5.csv&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>multifile_data &lt;- file_list %&gt;%
-  map(read_csv)
-
-class(multifile_data)</pre>
-
-<pre >## [1] &quot;list&quot;</pre>
+  map(read_csv)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Reading in multiple files</h2></hgroup><article  id="reading-in-multiple-files" class="smaller">
 
@@ -3947,14 +3936,8 @@ class(multifile_data)</pre>
 <pre class = 'prettyprint lang-r'>multifile_data[[2]] &lt;-
   separate(
     multifile_data[[2]],
-    col = `Sepal.Length:Sepal.Width:Petal.Length:Petal.Width:Species`,
-    into = c(
-      &quot;Sepal.Length&quot;,
-      &quot;Sepal.Width&quot;,
-      &#39;Petal.Length&#39;,
-      &quot;Petal.Width&quot;,
-      &quot;Species&quot;
-    ),
+    col = 1,
+    into = colnames(multifile_data[[1]]),
     sep = &quot;:&quot;
   )
 
@@ -3998,27 +3981,35 @@ head(multifile_data[[2]], 3)</pre>
 
 <!-- ``` -->
 
-<p>The <code>bind_rows()</code> function can be great for simply combining data.</p>
+<p>The <code>bind_rows()</code> function can be great for combining data.</p>
 
-<pre class = 'prettyprint lang-r'># bind_rows(multifile_data[[1]], multifile_data[[3]], multifile_data[[2]])
-bindrows_data &lt;- multifile_data %&gt;%
-    map_df(bind_rows, .id = &quot;experiment&quot;) # recall that modify keeps the same data type 
-# so that will not do what we want here because we want a data frame instead of a list!
-dim(bindrows_data)</pre>
-
-<pre >## [1] 450   6</pre>
-
-<pre class = 'prettyprint lang-r'>tail(bindrows_data, 2)</pre>
-
-<pre >## # A tibble: 2 × 6
-##   experiment Sepal.Length Sepal.Width Petal.Length Petal.Width Species  
-##   &lt;chr&gt;             &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;    
-## 1 3                   6.2         3.4          5.4         2.3 virginica
-## 2 3                   5.9         3            5.1         1.8 virginica</pre>
+<p>recall that <code>modify</code> keeps the same data type (here, a list). We want a data frame instead.</p>
 
 <p>See <a href='https://www.opencasestudies.org/ocs-bp-vaping-case-study' title=''>https://www.opencasestudies.org/ocs-bp-vaping-case-study</a> for more information!</p>
 
-</article></slide><slide class=""><hgroup><h2>Lab</h2></hgroup><article  id="lab">
+<pre class = 'prettyprint lang-r'>all_files_data &lt;- 
+  multifile_data %&gt;%
+  map_df(bind_rows, .id = &quot;experiment&quot;)
+
+glimpse(all_files_data)</pre>
+
+<pre >## Rows: 450
+## Columns: 6
+## $ experiment   &lt;chr&gt; &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1…
+## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4, 4.…
+## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.…
+## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5, 1.…
+## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.…
+## $ Species      &lt;chr&gt; &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa…</pre>
+
+</article></slide><slide class=""><hgroup><h2>Summary</h2></hgroup><article  id="summary">
+
+<ul>
+<li>function(x){ } or (x){ } denotes a function. You also commonly see <code>~.x</code> inside <code>across</code></li>
+<li><code>map_df</code> and <code>modify</code> <strong>apply functions</strong> to each element of an object. <code>map</code> returns a list, <code>modify</code> returns the same object type.</li>
+<li>The purrr package has other useful functional programming features</li>
+<li>lists can be great for storing iterative work.</li>
+</ul>
 
 <p><a href='https://sisbid.github.io/Data-Wrangling/labs/functional-program-lab.Rmd' title=''>https://sisbid.github.io/Data-Wrangling/labs/functional-program-lab.Rmd</a></p>
 
@@ -4322,6 +4313,11 @@ dim(bindrows_data)</pre>
        window.jQuery(document).on('slideenter', function(e) {
          window.jQuery(e.target).trigger('shown');
       });
+    }
+    if (window.Shiny) {
+      // Initialize slides when this script appears on the page, since it
+      // indicates that the <slides> markup has been fully loaded.
+      window.loadDeck();
     }
   })();
 </script>
