@@ -87,8 +87,6 @@ air_2016 <- jsonData %>%
 
 ```{r}
 air_2016$Airport %>% count()
-# OR
-length(unique(air_2016$Airport$Code))
 ```
 
 5. Filter `air_2016` to include only NYC LaGuardia and Chicago O'Hare airports (Code : "LGA", "ORD"). Call this `lga_ord`.

@@ -49,7 +49,7 @@ mtcars %>%
 ## functions in R
 
 ```{r}
-my_function <- function(x){x + 1}
+my_function <- function(x){x + 1} # alt: \(x){x + 1}
 my_function
 ```
 
@@ -184,11 +184,11 @@ iris %>% filter(Sepal.Length > 2.4 & Sepal.Width > 2.4 &
                 Petal.Length > 2.4 & Petal.Width > 2.4)
 
 iris %>% filter(if_all(Sepal.Length:Petal.Width, ~ . > 2.4))
-
-iris %>% filter(if_all(where(is.numeric), ~ . > 2.4))
 ```
 
 <!-- iris %>% select(-Species) %>% filter(if_all(everything(), ~ . > 2.4)) -->
+
+<!-- iris %>% filter(if_all(where(is.numeric), ~ . > 2.4)) -->
 
 ## `purrr` is also a super helpful package!
 
@@ -233,9 +233,7 @@ map(vect, round) %>% unlist()
 ## Using `map_df()`
 
 ```{r}
-my_tibble <- tibble(
-  values = c(1.2, 2.3, 3.5, 4.6)
-)
+my_tibble <- tibble(values = c(1.2, 2.3, 3.5, 4.6))
 map_df(my_tibble, round)
 ```
 
@@ -286,24 +284,31 @@ modify(my_tibble, round)
 <!-- ``` -->
 
 
-## `purrr` - apply function to all columns
+## `purrr` : `map_df` or `modify`
 
-two options `map_df` or `modify` 
-
-Lots of variations of `map` based on output
+`map_df` 
 
 ```{r}
 library(purrr)
 head(mtcars, 2)
  mtcars %>% 
-   map_df(round) %>% # will be a tibble now - will remove rownames
+   map_df(round) %>%
    head(2)
+```
+
+## `purrr` : `map_df` or `modify`
+
+`modify` 
+
+```{r}
  mtcars %>% 
-   modify(round) %>% # modify keeps original data type
+   modify(round) %>%
    head(2)
 ```
 
 ## It's a bit simpler than across...
+
+But `across` keeps rownames..
 
 ```{r}
 mtcars %>% 
@@ -311,13 +316,13 @@ mtcars %>%
   head(n = 2)
 
 mtcars %>% 
-  mutate(across(.cols = everything(), format, digits = 1)) %>%
+  mutate(across(.cols = everything(), ~ format(.x, digits = 1))) %>%
   head(n = 2)
 ```
 
-## `purrr` apply function to some columns like accross
+## `purrr` apply function to some columns like across {.codesmall}
 
-Using `modify_if()` or `map_if()`, we can specify what columns to modify
+Using `modify_if()` (or `map_if()`), we can specify what columns to modify
 
 ```{r}
 head(as_tibble(iris), 3)
@@ -325,15 +330,10 @@ head(as_tibble(iris), 3)
 as_tibble(iris) %>% 
   modify_if(is.numeric, as.character) %>%
   head(3)
-
-as_tibble(iris) %>% 
-  map_if(is.numeric, as.character) %>%
-  class()
-
 ```
 
 
-## modify_if vs mutate/across/where
+## Speed test! modify_if vs mutate/across/where
 
 ```{r}
 system.time(iris %>%
@@ -385,7 +385,7 @@ mylist[["letters"]] # returns the vector 'letters'
 
 <!-- ## Examples we will use -->
 
- <!-- * https://jennybc.github.io/purrr-tutorial/ --> -->
+ <!-- * https://jennybc.github.io/purrr-tutorial/ -->
 
 <!-- * https://cran.r-project.org/web/packages/repurrrsive/index.html -->
 
@@ -425,7 +425,7 @@ mylist[1:2] # returns a list
 
 ## ... Why lists?
 
-## great example with `split()`
+## List: `split()` the dataset by `cyl` 
 
 ```{r}
 head(mtcars)
@@ -433,7 +433,7 @@ str(mtcars %>% split(.$cyl))
 
 ```
 
-## great example with `split()`
+## List: model on each
 
 ```{r}
 
@@ -444,7 +444,7 @@ mtcars %>%
   map_dbl("r.squared")
 ```
 
-## Lists from multiple files! {.smaller}
+## Use lists to iterate through multiple files! {.smaller}
 
 This comes up a lot in data cleaning and also when reading in multiple files!
 
@@ -459,9 +459,6 @@ file_list
 
 multifile_data <- file_list %>%
   map(read_csv)
-
-class(multifile_data)
-
 ```
 
 ## Reading in multiple files {.smaller}
@@ -490,14 +487,8 @@ First, separating by the `:`.
 multifile_data[[2]] <-
   separate(
     multifile_data[[2]],
-    col = `Sepal.Length:Sepal.Width:Petal.Length:Petal.Width:Species`,
-    into = c(
-      "Sepal.Length",
-      "Sepal.Width",
-      'Petal.Length',
-      "Petal.Width",
-      "Species"
-    ),
+    col = 1,
+    into = colnames(multifile_data[[1]]),
     sep = ":"
   )
 
@@ -526,20 +517,26 @@ head(multifile_data[[2]], 3)
 
 <!-- ``` -->
 
-The `bind_rows()` function can be great for simply combining data.
+The `bind_rows()` function can be great for combining data.
 
-```{r}
-# bind_rows(multifile_data[[1]], multifile_data[[3]], multifile_data[[2]])
-bindrows_data <- multifile_data %>%
-    map_df(bind_rows, .id = "experiment") # recall that modify keeps the same data type 
-# so that will not do what we want here because we want a data frame instead of a list!
-dim(bindrows_data)
-tail(bindrows_data, 2)
-```
+recall that `modify` keeps the same data type (here, a list). We want a data frame instead.
 
 See https://www.opencasestudies.org/ocs-bp-vaping-case-study for more information!
 
-## Lab
+```{r}
+all_files_data <- 
+  multifile_data %>%
+  map_df(bind_rows, .id = "experiment")
+
+glimpse(all_files_data)
+```
+
+## Summary
+
+- function(x){ } or \(x){ } denotes a function. You also commonly see `~.x` inside `across`
+- `map_df` and `modify` **apply functions** to each element of an object. `map` returns a list, `modify` returns the same object type.
+- The purrr package has other useful functional programming features
+- lists can be great for storing iterative work.
 
 https://sisbid.github.io/Data-Wrangling/labs/functional-program-lab.Rmd
 

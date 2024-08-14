@@ -55,11 +55,11 @@ Make sure you have a GitHub profile: https://github.com/
 | 11:00-11:30 | Break                                        |                       |                                      |
 | 11:30-12:20 | [Reproducible Research][13] ([PDF][14])      | [lab][15]             | [lab key][16] / [lab key output][17] |
 | 12:20-12:35 | Break                                        |                       |                                      |
-| 12:35-1:25  | [Data Subsetting Part 1][22] ([PDF][23])     | [lab][24]             |       [lab key][25] / [lab key output][26]                               |
+| 12:35-1:25  | [Data Subsetting Part 1][22] ([PDF][23])     | [lab][24]             | [lab key][25] / [lab key output][26] |
 | 1:25-1:40   | Break                                        |                       |                                      |
-| 1:40-2:30   | [Missing Data][x5] ([PDF][x6])               | [lab][x7]             | [lab key][x8]/[lab key output][x9]                                      |
+| 1:40-2:30   | [Missing Data][x5] ([PDF][x6])               | [lab][x7]             | [lab key][x8]/[lab key output][x9]   |
 | **Day 2**   |                                              |                       |                                      |
-| 8:00-8:50   | [Data Subsetting Part 2][27] ([PDF][28])     | [lab][29]             | [lab key][30] / [lab key output][31]  |
+| 8:00-8:50   | [Data Subsetting Part 2][27] ([PDF][28])     | [lab][29]             | [lab key][30] / [lab key output][31] |
 | 8:50-9:05   | Break                                        |                       |                                      |
 | 9:05-9:55   | [Data Summarization][32] ([PDF][33])         | [lab][34]             | [lab key][35] / [lab key output][36] |
 | 9:55-10:10  | Break                                        |                       |                                      |
@@ -98,8 +98,8 @@ Make sure you have a GitHub profile: https://github.com/
 [15]: labs/rmarkdown-lab.Rmd
 [16]: labs/rmarkdown-lab-key.Rmd
 [17]: labs/rmarkdown-lab-key.html
-[18]: https://docs.google.com/presentation/d/1E0o-VNm_IatdpKX7pMjBTGdnMtf8iPVqEAd7PSaN0OM/edit?usp=sharing
-[19]: lecture_notes/sisbid_github_2023.pdf
+[18]: https://docs.google.com/presentation/d/1-mSv1WMFmlu_93-cMKKHqD1zi8Q6meLVUV7S_G0ZBTo/edit?usp=sharing
+[19]: lecture_notes/sisbid_github_2024.pdf
 [20]: https://lab.github.com/githubtraining/introduction-to-github
 [21]: labs/github-lab.md
 [x5]: lecture_notes/Data_Missing.html
@@ -158,8 +158,8 @@ Make sure you have a GitHub profile: https://github.com/
 [61]: labs/functional-program-lab-key.html
 [62]: lecture_notes/Bioconductor_intro.html
 [63]: lecture_notes/Bioconductor_intro.pdf
-[64]: https://docs.google.com/presentation/d/18UA0WLDVasiSijFyRJZ3T3GWl8eokv4GBxMzQKy8sjk/edit?usp=sharing
-[65]: lecture_notes/sisbid_wrap_up_2022.pdf
+[64]: https://docs.google.com/presentation/d/1Q8CnyHd3YJMUxoRNk5611GmPN-cBks5TfWoDMWZT6Eg/edit?usp=sharing
+[65]: lecture_notes/sisbid_wrap_up_2024.pdf
 
 **Miscellaneous**
 

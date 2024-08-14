@@ -369,6 +369,13 @@ popup and will need to grant permissions.</p>
 we discussed in class, call this object <code>x</code>.</li>
 </ol>
 <pre class="r"><code>x &lt;- read_sheet(sheet_url)</code></pre>
+<pre><code>## ! Using an auto-discovered, cached token.</code></pre>
+<pre><code>##   To suppress this message, modify your code or options to clearly consent to
+##   the use of a cached token.</code></pre>
+<pre><code>##   See gargle&#39;s &quot;Non-interactive auth&quot; vignette for more details:</code></pre>
+<pre><code>##   &lt;https://gargle.r-lib.org/articles/non-interactive-auth.html&gt;</code></pre>
+<pre><code>## ℹ The googlesheets4 package is using a cached token for
+##   &#39;avamariehoffman@gmail.com&#39;.</code></pre>
 <pre><code>## ✔ Reading from &quot;data_wrangling_2019&quot;.</code></pre>
 <pre><code>## ✔ Range &#39;Sheet1&#39;.</code></pre>
 <ol start="3" style="list-style-type: decimal">
@@ -405,23 +412,23 @@ Hint: use a <code>stringr</code> function.</li>
 <pre class="r"><code>x %&gt;%
   filter(str_detect(`Why are you taking this module (free text)`, pattern = &quot;learn&quot;))</code></pre>
 <pre><code>## # A tibble: 12 × 7
-##    `UW?` `R user (yes or no)` Years of R experienc…¹ `Github User` Years of Github Expe…² Why are you taking t…³
-##    &lt;chr&gt; &lt;chr&gt;                &lt;list&gt;                 &lt;chr&gt;         &lt;list&gt;                 &lt;chr&gt;                 
-##  1 no    yes                  &lt;dbl [1]&gt;              yes           &lt;dbl [1]&gt;              learn more about heal…
-##  2 no    yes                  &lt;dbl [1]&gt;              sometimes     &lt;dbl [1]&gt;              learn best practices  
-##  3 no    yes                  &lt;dbl [1]&gt;              no            &lt;dbl [1]&gt;              learn more R skills   
-##  4 no    yes                  &lt;dbl [1]&gt;              sparsely      &lt;dbl [1]&gt;              have intermediate kno…
-##  5 No    YEs but sparse       &lt;dbl [1]&gt;              no            &lt;dbl [1]&gt;              learn about big data …
-##  6 no    not regularly        &lt;dbl [1]&gt;              no            &lt;dbl [1]&gt;              as prep for machine l…
-##  7 yes   meh                  &lt;chr [1]&gt;              meh           &lt;chr [1]&gt;              learn to integrate la…
-##  8 no    no                   &lt;dbl [1]&gt;              no            &lt;dbl [1]&gt;              i need to learn to ho…
-##  9 no    no                   &lt;chr [1]&gt;              no            &lt;dbl [1]&gt;              need to learn R for w…
-## 10 no    future user          &lt;chr [1]&gt;              no            &lt;dbl [1]&gt;              need to learn how bec…
-## 11 no    yes                  &lt;dbl [1]&gt;              not really    &lt;dbl [1]&gt;              I work in an environm…
-## 12 yes   sort of              &lt;chr [1]&gt;              sort of       &lt;chr [1]&gt;              learn about R, data c…
-## # ℹ abbreviated names: ¹​`Years of R experience`, ²​`Years of Github Experience`,
-## #   ³​`Why are you taking this module (free text)`
-## # ℹ 1 more variable: `Additional comments` &lt;chr&gt;</code></pre>
+##    `UW?` `R user (yes or no)` `Years of R experience` `Github User`
+##    &lt;chr&gt; &lt;chr&gt;                &lt;list&gt;                  &lt;chr&gt;        
+##  1 no    yes                  &lt;dbl [1]&gt;               yes          
+##  2 no    yes                  &lt;dbl [1]&gt;               sometimes    
+##  3 no    yes                  &lt;dbl [1]&gt;               no           
+##  4 no    yes                  &lt;dbl [1]&gt;               sparsely     
+##  5 No    YEs but sparse       &lt;dbl [1]&gt;               no           
+##  6 no    not regularly        &lt;dbl [1]&gt;               no           
+##  7 yes   meh                  &lt;chr [1]&gt;               meh          
+##  8 no    no                   &lt;dbl [1]&gt;               no           
+##  9 no    no                   &lt;chr [1]&gt;               no           
+## 10 no    future user          &lt;chr [1]&gt;               no           
+## 11 no    yes                  &lt;dbl [1]&gt;               not really   
+## 12 yes   sort of              &lt;chr [1]&gt;               sort of      
+## # ℹ 3 more variables: `Years of Github Experience` &lt;list&gt;,
+## #   `Why are you taking this module (free text)` &lt;chr&gt;,
+## #   `Additional comments` &lt;chr&gt;</code></pre>
 </div>
 <div id="json-lab" class="section level2">
 <h2>JSON Lab</h2>
@@ -491,9 +498,6 @@ dim(jsonData$Airport)</code></pre>
 <pre class="r"><code>air_2016$Airport %&gt;% count()</code></pre>
 <pre><code>##    n
 ## 1 29</code></pre>
-<pre class="r"><code># OR
-length(unique(air_2016$Airport$Code))</code></pre>
-<pre><code>## [1] 29</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Filter <code>air_2016</code> to include only NYC LaGuardia and
 Chicago O’Hare airports (Code : “LGA”, “ORD”). Call this
