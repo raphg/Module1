@@ -48,7 +48,7 @@ gs4_auth(email = "avamariehoffman@gmail.com")
 
 ## Reading data with the googlesheets4 package
 
-You can also supply an authorization token directly, but make sure to add any files to your .gitignore!
+You can also supply an authorization token directly, but make sure never to make these visible online!
 
 ```{r eval = FALSE}
 library(googledrive)
